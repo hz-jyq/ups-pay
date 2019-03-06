@@ -46,7 +46,6 @@ public class TestController {
 	@ResponseBody
 	@RequestMapping("/testPay.do")
 	public Object testpay(UpsPayParamModel model) throws InterruptedException {
-
 		model.setBusinessFlowNum(UUID.randomUUID().toString());
 		model.setSign(SecurityUtils.sign(model, privateKey));
 		Map<String, String> map = ReflectUtils.objectToMap(model);
