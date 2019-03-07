@@ -343,13 +343,15 @@ public class IndexController {
 		ValidateUtils.validate(upsParamModel);
 		// 获取当前环境
 		String profile = SpringUtils.getApplicationContext().getEnvironment().getActiveProfiles()[0];
+		
+		logger.info("spring当前运行环境：{}",profile);
 		// 查询商户配置公钥
 		String publicKey = merchantConfigService.queryMerchantPublicKey(upsParamModel.getFromSystem());
 		// RSA验证签名
 		SecurityUtils.signVerification(upsParamModel, publicKey);
 
 		// 非生产环境限制金钱为0.01
-		if (!StringUtils.equals(profile, "prod")) {
+		if (!StringUtils.equals(profile.trim(), "prod")) {
 			if (upsParamModel instanceof UpsPayParamModel) {
 				((UpsPayParamModel) upsParamModel).setAmount(new BigDecimal("0.01"));
 			}
