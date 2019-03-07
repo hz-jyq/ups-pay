@@ -324,7 +324,8 @@ public class IndexController {
 		upsOrderEntity.setUpsParamModel(upm);
 		// 处理并返回结果
 		UpsResultModel upsResultModel = bussinessHandlerFactory.getInstance(upm).handler(upsOrderEntity);
-		//UpsResultModel upsResultModel = new UpsResultModel(UpsResultEnum.SUCCESS, "123");
+		// UpsResultModel upsResultModel = new UpsResultModel(UpsResultEnum.SUCCESS,
+		// "123");
 		return recordAndReturnResult(upsResultModel);
 	}
 
@@ -341,15 +342,14 @@ public class IndexController {
 		request.setAttribute(RequestAttributeName.UPS_LOG_ENTITY, upsLogEntity);
 		// 参数合法性验证
 		ValidateUtils.validate(upsParamModel);
-		// 获取当前环境
-		String profile = SpringUtils.getApplicationContext().getEnvironment().getActiveProfiles()[0];
-		
-		logger.info("spring当前运行环境：{}",profile);
 		// 查询商户配置公钥
 		String publicKey = merchantConfigService.queryMerchantPublicKey(upsParamModel.getFromSystem());
 		// RSA验证签名
 		SecurityUtils.signVerification(upsParamModel, publicKey);
+		// 获取当前环境
+		String profile = SpringUtils.getApplicationContext().getEnvironment().getActiveProfiles()[0];
 
+		logger.info("spring当前运行环境：{}", profile);
 		// 非生产环境限制金钱为0.01
 		if (!StringUtils.equals(profile.trim(), "prod")) {
 			if (upsParamModel instanceof UpsPayParamModel) {
