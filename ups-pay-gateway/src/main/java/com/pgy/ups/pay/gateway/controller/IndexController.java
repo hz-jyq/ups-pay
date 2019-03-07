@@ -1,6 +1,5 @@
 package com.pgy.ups.pay.gateway.controller;
 
-import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
 
@@ -351,14 +350,14 @@ public class IndexController {
 
 		logger.info("spring当前运行环境：{}", profile);
 		// 非生产环境限制金钱为0.01
-		if (!StringUtils.equals(profile.trim(), "prod")) {
+		/*if (!StringUtils.equals(profile.trim(), "prod")) {
 			if (upsParamModel instanceof UpsPayParamModel) {
 				((UpsPayParamModel) upsParamModel).setAmount(new BigDecimal("0.01"));
 			}
 			if (upsParamModel instanceof UpsCollectParamModel) {
 				((UpsCollectParamModel) upsParamModel).setAmount(new BigDecimal("0.01"));
 			}
-		}
+		}*/
 
 	}
 

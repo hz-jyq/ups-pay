@@ -19,6 +19,6 @@ public interface UpsAuthSignDao extends JpaRepository<UpsAuthSignEntity, Long> {
      */
    @Modifying
    @Transactional
-   @Query(value="update UpsAuthSignEntity  SET  status=20 WHERE fromSystem = :fromSystem AND  userNo = :userNo AND bankMd5 = :bankMd5  AND status=10 ")
+   @Query(value="update UpsAuthSignEntity e  SET  e.status=20 WHERE e.fromSystem = :fromSystem AND  e.userNo = :userNo AND e.bankMd5 = :bankMd5  AND e.status=10 ")
    void  unbindCard(@Param("fromSystem") String fromSystem,@Param("userNo") String userNo,@Param("bankMd5") String bankMd5);
 }
