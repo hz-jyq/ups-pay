@@ -1,5 +1,6 @@
 package com.pgy.ups.pay.gateway.controller;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -47,16 +48,17 @@ public class TestController {
 	@RequestMapping("/testPay.do")
 	public Object testpay(UpsPayParamModel model) throws InterruptedException {
 		model.setBusinessFlowNum(UUID.randomUUID().toString());
-		model.setSign(SecurityUtils.sign(model, privateKey));
+		model.setAmount(new BigDecimal("0.01"));
+		model.setSign(SecurityUtils.sign(model, privateKey));		
 		Map<String, String> map = ReflectUtils.objectToMap(model);
 		return HttpClientUtils.postRequest("http://127.0.0.1:9080/ups-pay/index/pay.do", map, 100000);
-
 	}
 
 	@ResponseBody
 	@RequestMapping("/testCollect.do")
 	public Object testCollect(UpsCollectParamModel model) {
 		model.setBusinessFlowNum(UUID.randomUUID().toString());
+		model.setAmount(new BigDecimal("0.01"));
 		model.setSign(SecurityUtils.sign(model, privateKey));
 		Map<String, String> map = ReflectUtils.objectToMap(model);
 		return HttpClientUtils.postRequest("http://127.0.0.1:9080/ups-pay/index/collect.do", map, 100000);

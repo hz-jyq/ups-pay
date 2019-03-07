@@ -39,6 +39,7 @@ public class ShardingConfiguration {
 	@Value("${druid.config.path}")
 	private String druidConfig;
 
+	
 	@Bean("dataSource")
 	public DataSource getShardingDataSource() {
 
