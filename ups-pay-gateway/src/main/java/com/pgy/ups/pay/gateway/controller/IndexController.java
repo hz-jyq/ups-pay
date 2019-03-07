@@ -1,5 +1,6 @@
 package com.pgy.ups.pay.gateway.controller;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
 
@@ -108,10 +109,8 @@ public class IndexController {
 		logger.info("接收借款参数：{}", upsPayParamModel);
 		// 验证并保存参数，记录日志
 		recordAndVerifyParam(upsPayParamModel);
-
 		upsPayParamModel.setOrderType(OrderType.PAY);
 		return disposePayOrCollect(upsPayParamModel);
-
 	}
 
 	/**
@@ -129,7 +128,6 @@ public class IndexController {
 		CollectChooseEntity cce = collectChooseService.queryCollectType(upsCollectParamModel.getFromSystem());
 		upsCollectParamModel.setOrderType(Objects.isNull(cce) ? OrderType.COLLECT
 				: StringUtils.isBlank(cce.getCollectType()) ? OrderType.COLLECT : cce.getCollectType());
-
 		return disposePayOrCollect(upsCollectParamModel);
 	}
 
@@ -271,10 +269,8 @@ public class IndexController {
 		String payChannel = routeService.obtainAvalibaleRoute(upsBindCardParamModel);
 		upsBindCardParamModel.setPayChannel(payChannel);
 		// 处理并返回结果
-
 		UpsResultModel upsResultModel = bussinessHandlerFactory.getInstance(upsBindCardParamModel)
 				.handler(upsBindCardParamModel);
-
 		return recordAndReturnResult(upsResultModel);
 	}
 
@@ -350,14 +346,14 @@ public class IndexController {
 
 		logger.info("spring当前运行环境：{}", profile);
 		// 非生产环境限制金钱为0.01
-		/*if (!StringUtils.equals(profile.trim(), "prod")) {
+		if (!StringUtils.equals(profile.trim(), "prod")) {
 			if (upsParamModel instanceof UpsPayParamModel) {
 				((UpsPayParamModel) upsParamModel).setAmount(new BigDecimal("0.01"));
 			}
 			if (upsParamModel instanceof UpsCollectParamModel) {
 				((UpsCollectParamModel) upsParamModel).setAmount(new BigDecimal("0.01"));
 			}
-		}*/
+		}
 
 	}
 

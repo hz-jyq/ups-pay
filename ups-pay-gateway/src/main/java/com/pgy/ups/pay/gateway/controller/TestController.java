@@ -47,7 +47,6 @@ public class TestController {
 	@RequestMapping("/testPay.do")
 	public Object testpay(UpsPayParamModel model) throws InterruptedException {
 		model.setBusinessFlowNum(UUID.randomUUID().toString());
-		//model.setAmount(new BigDecimal("0.01"));
 		model.setSign(SecurityUtils.sign(model, privateKey));		
 		Map<String, String> map = ReflectUtils.objectToMap(model);
 		return HttpClientUtils.postRequest("http://127.0.0.1:9080/ups-pay/index/pay.do", map, 100000);
@@ -57,7 +56,6 @@ public class TestController {
 	@RequestMapping("/testCollect.do")
 	public Object testCollect(UpsCollectParamModel model) {
 		model.setBusinessFlowNum(UUID.randomUUID().toString());
-		//model.setAmount(new BigDecimal("0.01"));
 		model.setSign(SecurityUtils.sign(model, privateKey));
 		Map<String, String> map = ReflectUtils.objectToMap(model);
 		return HttpClientUtils.postRequest("http://127.0.0.1:9080/ups-pay/index/collect.do", map, 100000);
