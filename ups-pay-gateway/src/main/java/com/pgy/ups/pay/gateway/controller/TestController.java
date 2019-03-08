@@ -66,7 +66,7 @@ public class TestController {
 	@RequestMapping("/testSignature.do")
 	public String testSignature(UpsSignatureParamModel model) {
 		model.setBusinessFlowNum(UUID.randomUUID().toString());
-		model.setBusinessFlowNum("sa123j123jw232218eee88");
+		//model.setBusinessFlowNum("sa123j123jw232218eee88");
 		model.setSign(SecurityUtils.sign(model, privateKey));
 		Map<String, String> map = ReflectUtils.objectToMap(model);
 		return HttpClientUtils.postRequest("http://127.0.0.1:9080/ups-pay/index/auth/signature.do", map, 100000);
