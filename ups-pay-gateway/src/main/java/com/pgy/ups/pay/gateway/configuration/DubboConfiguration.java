@@ -9,7 +9,7 @@ import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
 
 @Configuration
-@DubboComponentScan("com.pgy.ups.pay.gateway.**")
+@DubboComponentScan("com.pgy.ups.pay.service.**")
 public class DubboConfiguration {
 
 	@Bean
@@ -22,7 +22,6 @@ public class DubboConfiguration {
 		ApplicationConfig applicationConfig = new ApplicationConfig();
 		applicationConfig.setName(dubboProperties.getName());
 		applicationConfig.setLogger(dubboProperties.getLogger());
-		
 		// 关闭远程控制端口服务，防止2222端口占用异常
 		applicationConfig.setQosEnable(false);
 		return applicationConfig;
@@ -45,4 +44,5 @@ public class DubboConfiguration {
 		registryConfig.setClient(dubboProperties.getZkClient());
 		return registryConfig;
 	}
+	
 }
