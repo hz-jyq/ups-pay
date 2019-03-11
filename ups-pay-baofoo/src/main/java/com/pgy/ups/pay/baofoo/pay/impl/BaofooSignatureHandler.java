@@ -1,15 +1,5 @@
 package com.pgy.ups.pay.baofoo.pay.impl;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -28,6 +18,14 @@ import com.pgy.ups.pay.interfaces.model.UpsSignatureParamModel;
 import com.pgy.ups.pay.interfaces.pay.BussinessHandler;
 import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignService;
 import com.pgy.ups.pay.interfaces.service.config.UpsThirdpartyConfigService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 签约
@@ -105,7 +103,7 @@ public class BaofooSignatureHandler extends SignatureBindBaseCore
 		String respCode = resultJson.getString("resp_code");
 		String respMsg = resultJson.getString("resp_msg");
 		if (!"0000".equals(respCode)) {
-			throw new BussinessException(respMsg);
+			return  UpsResultModelUtil.upsResultModelSuccess("02",respMsg,respCode,respMsg);
 		}
 		if (upsAuthSignEntity == null) {
 			upsAuthSignEntity = creatBaofooSignatureBind(upsSignatureParamModel);

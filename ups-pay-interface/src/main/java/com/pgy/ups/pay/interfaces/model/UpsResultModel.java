@@ -30,7 +30,7 @@ public class UpsResultModel extends Model{
 	 */
 	private String message;
 
-	private Serializable result;
+	private Object result;
 	
 	private String sign;
 	
@@ -57,14 +57,6 @@ public class UpsResultModel extends Model{
 		this.message = message;
 	}
 
-	public Object getResult() {
-		return result;
-	}
-
-	public void setResult(Serializable result) {
-		this.result = result;
-	}
-
 
 	public String getSign() {
 		return sign;
@@ -79,8 +71,21 @@ public class UpsResultModel extends Model{
 		this.message=upsResultEnum.getMessage();
 	}
 
-	public UpsResultModel(UpsResultEnum upsResultEnum,Serializable result) {
+	public  UpsResultModel(UpsResultEnum upsResultEnum,Object result) {
 		this(upsResultEnum);
+		this.result = result;
+	}
+
+	public Object getResult() {
+		return result;
+	}
+
+	public void setResult(Object result) {
+		this.result = result;
+	}
+
+	public  UpsResultModel(String code, String message, Object result) {
+		this(code,message);
 		this.result = result;
 	}
 
