@@ -130,6 +130,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>kryo</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.curator</groupId>
 			<artifactId>curator-framework</artifactId>
 			<exclusions>
@@ -170,6 +175,14 @@
 			<groupId>com.pgy.ups.pay</groupId>
 			<artifactId>ups-pay-route</artifactId>
 		</dependency>
+
+
+		<dependency>
+			<groupId>com.pgy.ups.pay</groupId>
+			<artifactId>ups-pay-service</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
