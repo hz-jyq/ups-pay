@@ -104,7 +104,7 @@ public class BaofooBindCardHandler extends SignatureBindBaseCore
 		String respCode = resultJson.getString("resp_code");
 		String respMsg = resultJson.getString("resp_msg");
 		if (!"0000".equals(respCode)) {
-			throw new BussinessException(respMsg);
+			return  UpsResultModelUtil.upsResultModelSuccess("02",respMsg,respCode,respMsg);
 		}
 		upsAuthSignEntity.setStatus(10);
 		upsAuthSignEntity.setSignDate(new Date());

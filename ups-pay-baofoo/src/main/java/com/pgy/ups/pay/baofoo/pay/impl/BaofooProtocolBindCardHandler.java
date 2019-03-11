@@ -120,7 +120,7 @@ public class BaofooProtocolBindCardHandler extends SignatureBindBaseCore impleme
 			String biz_resp_code = map.get("biz_resp_code");
 			String biz_resp_msg = map.get("biz_resp_msg");
 			if (!"S".equalsIgnoreCase(resp_code) && !"0000".equals(biz_resp_code)) {
-				throw new BussinessException(biz_resp_msg);
+				return  UpsResultModelUtil.upsResultModelSuccess("02",biz_resp_msg,biz_resp_code,biz_resp_msg);
 			}
 			String rdgtlEnvlp = BaofooSecurityUtil.Base64Decode(BaofooRsaCodingUtil.decryptByPriPfxFile(
 					map.get("dgtl_envlp"), RSA_KEY_PATH + configMap.get("pfxPath"), configMap.get("pfxpwd")));
