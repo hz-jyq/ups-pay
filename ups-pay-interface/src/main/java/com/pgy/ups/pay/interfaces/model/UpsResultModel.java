@@ -1,8 +1,6 @@
 package com.pgy.ups.pay.interfaces.model;
 
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.pgy.ups.pay.interfaces.enums.UpsResultEnum;
 
