@@ -27,10 +27,10 @@ public abstract  class EncryptModel extends Model{
 	protected String identityMd5;
 	
 	@Column(name="phone_no_encrypt")
-	protected String PhoneNoEncrypt;
+	protected String phoneNoEncrypt;
 	
 	@Column(name="phone_no_md5")
-	protected String PhoneNoMd5;
+	protected String phoneNoMd5;
 	
 	@Column(name="bank_encrypt")
 	protected String bankEncrypt;
@@ -70,20 +70,21 @@ public abstract  class EncryptModel extends Model{
 		this.identityMd5 = identityMd5;
 	}
 
+
 	public String getPhoneNoEncrypt() {
-		return PhoneNoEncrypt;
+		return phoneNoEncrypt;
 	}
 
 	public void setPhoneNoEncrypt(String phoneNoEncrypt) {
-		PhoneNoEncrypt = phoneNoEncrypt;
+		this.phoneNoEncrypt = phoneNoEncrypt;
 	}
 
 	public String getPhoneNoMd5() {
-		return PhoneNoMd5;
+		return phoneNoMd5;
 	}
 
 	public void setPhoneNoMd5(String phoneNoMd5) {
-		PhoneNoMd5 = phoneNoMd5;
+		this.phoneNoMd5 = phoneNoMd5;
 	}
 
 	public String getBankEncrypt() {

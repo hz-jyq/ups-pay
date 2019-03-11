@@ -64,7 +64,7 @@ public class UpsAuthSignServiceImpl implements UpsAuthSignService {
     @Override
     public void unbindCard(UpsUnBindCardModel upsUnBindCardModel) {
         PgyDataHandlerService payDate =  new  PgyDataHandlerServiceImpl();
-        upsAuthSignBaofooDao.unbindCard(upsUnBindCardModel.getFromSystem(),upsUnBindCardModel.getUserNo(),payDate.md5(upsUnBindCardModel.getBankCard()));
+        upsAuthSignBaofooDao.unbindCard(upsUnBindCardModel.getFromSystem(),upsUnBindCardModel.getUserNo(),payDate.md5(upsUnBindCardModel.getBankCard()),payDate.md5(upsUnBindCardModel.getPhoneNo()),payDate.md5(upsUnBindCardModel.getIdentity()),payDate.md5(upsUnBindCardModel.getRealName()));
     }
 
 }
