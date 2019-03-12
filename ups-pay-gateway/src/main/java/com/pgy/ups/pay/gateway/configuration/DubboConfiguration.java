@@ -47,7 +47,7 @@ public class DubboConfiguration {
 	}
 
 	@Bean
-	public ProtocolConfig ProtocolConfig(DubboProperties dubboProperties) {
+	public ProtocolConfig protocolConfig(DubboProperties dubboProperties) {
 		ProtocolConfig registryConfig = new ProtocolConfig();
 		registryConfig.setPort(-1);
 		return registryConfig;
