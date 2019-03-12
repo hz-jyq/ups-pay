@@ -2,6 +2,7 @@ package com.pgy.ups.pay.interfaces.form;
 
 import com.pgy.ups.pay.interfaces.model.Model;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @SuppressWarnings("serial")
 public abstract class BaseForm extends Model {
@@ -26,7 +27,7 @@ public abstract class BaseForm extends Model {
 		this.pageSize = pageSize;
 	}
 
-	public PageRequest getPageRequest(){
+	public Pageable getPageRequest(){
 		return  PageRequest.of(pageNumber - 1,pageSize);
 	}
 

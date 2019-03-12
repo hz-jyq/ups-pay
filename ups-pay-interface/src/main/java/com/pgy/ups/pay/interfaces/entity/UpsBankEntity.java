@@ -36,9 +36,6 @@ public class UpsBankEntity extends Model {
 	@Column(name = "logo_url")
 	private String logoUrl;
 
-	@Column(name = "active", columnDefinition = "BIT")
-	private Boolean active;
-
 	@Column(name = "create_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
@@ -81,13 +78,6 @@ public class UpsBankEntity extends Model {
 		this.logoUrl = logoUrl;
 	}
 
-	public Boolean getActive() {
-		return active;
-	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
 
 	public Date getCreateTime() {
 		return createTime;
@@ -121,4 +111,12 @@ public class UpsBankEntity extends Model {
 		this.updateUser = updateUser;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}	
+    
 }

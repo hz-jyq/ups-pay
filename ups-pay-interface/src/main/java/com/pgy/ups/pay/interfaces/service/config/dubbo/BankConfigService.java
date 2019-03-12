@@ -14,6 +14,8 @@ public interface BankConfigService {
      PageInfo<UpsBankEntity> queryAll(UpsBankForm upsBankForm);
      
      void deleteBankConfigById(Long id);
+
+     UpsBankEntity saveBankConfig(UpsBankForm form);
      
      
 
