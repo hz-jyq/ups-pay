@@ -26,7 +26,7 @@ public class BankConfigServiceImpl implements BankConfigService {
 	public PageInfo<UpsBankEntity> queryAll(UpsBankForm upsBankForm) {
 
 		Page<UpsBankEntity> page= bankConfigDao.findByForm(upsBankForm.getBankCode(), upsBankForm.getBankName(),
-				PageRequest.of(upsBankForm.getPageNumber(), upsBankForm.getPageSize()));
+				upsBankForm.getPageRequest());
 		return new PageInfo<>(page);
 	}
 
