@@ -26,8 +26,13 @@ public class BankConfigServiceImpl implements BankConfigService {
 	public PageInfo<UpsBankEntity> queryAll(UpsBankForm upsBankForm) {
 
 		Page<UpsBankEntity> page= bankConfigDao.findByForm(upsBankForm.getBankCode(), upsBankForm.getBankName(),
-				PageRequest.of(upsBankForm.getPageNumber(), upsBankForm.getPageSize()));
+				PageRequest.of(upsBankForm.getPageNumber()-1, upsBankForm.getPageSize()));
 		return new PageInfo<>(page);
+	}
+
+	@Override
+	public void deleteBankConfigById(Long id) {
+		bankConfigDao.deleteById(id);		
 	}
 
 }
