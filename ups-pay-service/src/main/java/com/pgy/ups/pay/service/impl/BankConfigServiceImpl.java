@@ -3,7 +3,6 @@ package com.pgy.ups.pay.service.impl;
 import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.pgy.ups.common.page.PageInfo;
@@ -26,7 +25,7 @@ public class BankConfigServiceImpl implements BankConfigService {
 	public PageInfo<UpsBankEntity> queryAll(UpsBankForm upsBankForm) {
 
 		Page<UpsBankEntity> page= bankConfigDao.findByForm(upsBankForm.getBankCode(), upsBankForm.getBankName(),
-				PageRequest.of(upsBankForm.getPageNumber()-1, upsBankForm.getPageSize()));
+				upsBankForm.getPageRequest());
 		return new PageInfo<>(page);
 	}
 

@@ -1,6 +1,7 @@
 package com.pgy.ups.pay.interfaces.form;
 
 import com.pgy.ups.pay.interfaces.model.Model;
+import org.springframework.data.domain.PageRequest;
 
 @SuppressWarnings("serial")
 public abstract class BaseForm extends Model {
@@ -23,6 +24,10 @@ public abstract class BaseForm extends Model {
 
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
+	}
+
+	public PageRequest getPageRequest(){
+		return  PageRequest.of(pageNumber - 1,pageSize);
 	}
 
 }
