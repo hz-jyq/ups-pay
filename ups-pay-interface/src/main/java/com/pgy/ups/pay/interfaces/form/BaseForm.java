@@ -26,7 +26,7 @@ public abstract class BaseForm extends Model {
 		this.pageSize = pageSize;
 	}
 
-	protected PageRequest getPageRequest(){
+	public PageRequest getPageRequest(){
 		return  PageRequest.of(pageNumber - 1,pageSize);
 	}
 
