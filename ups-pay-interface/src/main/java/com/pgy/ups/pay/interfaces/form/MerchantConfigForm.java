@@ -1,86 +1,39 @@
-package com.pgy.ups.pay.interfaces.entity;
+package com.pgy.ups.pay.interfaces.form;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.pgy.ups.pay.interfaces.model.Model;
-
-/**
- * 来源商户配置表
- * 
- * @author 墨凉
- *
- */
-@Entity
-@Table(name = "ups_t_merchant_config")
-public class MerchantConfigEntity extends Model {
+public class MerchantConfigForm extends BaseForm{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1205296307960629481L;
+	private static final long serialVersionUID = 5539785880156428493L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "merchant_code")
 	private String merchantCode;
 
-	@Column(name = "merchant_name")
 	private String merchantName;
 
-	@Column(name = "description")
 	private String description;
 
-	@Column(name = "available", columnDefinition = "bit")
 	private Boolean available;
 
-	@Column(name = "start_time")
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date startTime;
 
-	@Column(name = "end_time")
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date endTime;
 
-	@Column(name = "merchant_public_key")
 	private String merchantPublicKey;
 
-	@Column(name = "ups_private_key")
 	private String upsPrivateKey;
 
-	@Column(name = "create_time")
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 
-	@Column(name = "update_time")
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateTime;
 
-	@Column(name = "create_user")
 	private String createUser;
 
-	@Column(name = "update_user")
 	private String updateUser;
-
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "ups_t_merchant_order_type", joinColumns = @JoinColumn(name = "merchant_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "order_type_id", referencedColumnName = "id"))
-	private List<UpsOrderTypeEntity> orderTypeList;
 
 	public Long getId() {
 		return id;
@@ -104,6 +57,14 @@ public class MerchantConfigEntity extends Model {
 
 	public void setMerchantName(String merchantName) {
 		this.merchantName = merchantName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Boolean getAvailable() {
@@ -176,22 +137,6 @@ public class MerchantConfigEntity extends Model {
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public List<UpsOrderTypeEntity> getOrderTypeList() {
-		return orderTypeList;
-	}
-
-	public void setOrderTypeList(List<UpsOrderTypeEntity> orderTypeList) {
-		this.orderTypeList = orderTypeList;
-	}
+	}	
 
 }

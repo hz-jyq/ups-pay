@@ -18,13 +18,13 @@ import com.pgy.ups.pay.service.dao.BankConfigDao;
  *
  */
 @Service
-public class BankConfigServiceImpl implements BankConfigService {
+public class BankConfigServiceDubboImpl implements BankConfigService {
 
-	@Resource
+	@Resource(name="BankConfigDubboDao")
 	private BankConfigDao bankConfigDao;
 
 	@Override
-	public PageInfo<UpsBankEntity> queryAll(UpsBankForm upsBankForm) {
+	public PageInfo<UpsBankEntity> queryByForm(UpsBankForm upsBankForm) {
 
 		Page<UpsBankEntity> page = bankConfigDao.findByForm(upsBankForm.getBankCode(), upsBankForm.getBankName(),
 				upsBankForm.getPageRequest());

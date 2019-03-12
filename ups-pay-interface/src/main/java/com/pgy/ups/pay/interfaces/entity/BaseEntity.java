@@ -7,12 +7,16 @@ import javax.persistence.*;
 import java.util.Date;
 
 @MappedSuperclass
-public  class BaseEntity extends Model {
+public abstract class BaseEntity extends Model {
 
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = -4415508260301609479L;
+	private static final long serialVersionUID = 6386865233011450261L;
+
+	/**
+	 * 
+	 */
 
 
     @Column(name="update_time")

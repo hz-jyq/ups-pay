@@ -48,7 +48,7 @@ public class UpsBankEntity extends Model {
 	private String createUser;
     
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "upsBankEntity")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "upsBankEntity")
 	private transient List<UpsPayChannelBankEntity> list;
 
 	@Column(name = "update_user")
