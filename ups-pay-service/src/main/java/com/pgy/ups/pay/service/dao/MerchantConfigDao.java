@@ -13,17 +13,13 @@ import com.pgy.ups.pay.interfaces.entity.MerchantConfigEntity;
 @Repository("MerchantConfigDubboDao")
 public interface MerchantConfigDao extends JpaRepository<MerchantConfigEntity,Long>{
     
-	@Query(value = "SELECT * FROM ups_t_merchant_config c  WHERE IF (?1 != '',c.merchant_code =?1,1=1) AND IF (?2 !='',c.merchant_name LIKE %?2% ,1=1)  AND IF (?3 !='',c.merchant_name LIKE %?3% ,1=1) ORDER BY c.id DESC",  nativeQuery = true)
+	@Query(value = "SELECT * FROM ups_t_merchant_config c  WHERE IF (?1 != '',c.merchant_code =?1,1=1) AND IF (?2 !='',c.merchant_name LIKE %?2% ,1=1)  AND IF (?3 !='',c.description LIKE %?3% ,1=1) ORDER BY c.id DESC",  nativeQuery = true)
 	Page<MerchantConfigEntity> findByForm( String merchantCode,String merchantName,String description,Pageable pageRequest);
     
 	@Modifying
-	@Query("UPDATE MerchantConfigEntity e SET e.available = true WHERE e.id=?1")
+	@Query("UPDATE MerchantConfigEntity e SET e.available = ?2 WHERE e.id=?1")
 	@Transactional
-	void enableMerchantConfig(Long id);
+	void enableOrDisableMerchantConfig(Long id,boolean available);
 	
-	@Modifying
-	@Query("UPDATE MerchantConfigEntity e SET e.available = false WHERE e.id=?1")
-	@Transactional
-	void disableMerchantConfig(Long id);
 
 }

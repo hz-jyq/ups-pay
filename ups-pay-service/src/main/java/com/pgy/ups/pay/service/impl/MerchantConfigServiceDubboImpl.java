@@ -27,14 +27,20 @@ public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
 
 	@Override
 	public void enableMerchantConfig(Long id) {
-		merchantConfigDao.enableMerchantConfig(id);
+		merchantConfigDao.enableOrDisableMerchantConfig(id, true);
 		
 	}
 
 	@Override
 	public void disableMerchantConfig(Long id) {
-		merchantConfigDao.disableMerchantConfig(id);
+		merchantConfigDao.enableOrDisableMerchantConfig(id, false);
 		
+	}
+
+
+	@Override
+	public void deleteMerchantConfig(Long id) {
+		merchantConfigDao.deleteById(id);	
 	}
 
 }

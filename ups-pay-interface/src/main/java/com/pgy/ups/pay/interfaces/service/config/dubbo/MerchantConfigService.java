@@ -12,5 +12,7 @@ public interface MerchantConfigService {
 	
 	void disableMerchantConfig(Long id);
 
+	void deleteMerchantConfig(Long id);
+
 
 }

@@ -26,7 +26,7 @@ import io.shardingsphere.api.config.strategy.StandardShardingStrategyConfigurati
 import io.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 
 @Configuration
-public class ShardingConfiguration {
+public class ShardingConfiguration{
 
 	private Logger logger = LoggerFactory.getLogger(ShardingConfiguration.class);
     
