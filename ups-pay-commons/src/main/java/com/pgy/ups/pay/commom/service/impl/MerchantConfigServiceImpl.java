@@ -2,7 +2,6 @@ package com.pgy.ups.pay.commom.service.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,7 +99,7 @@ public class MerchantConfigServiceImpl implements MerchantConfigService, Cacheab
 	@Override
 	public List<MerchantConfigEntity> queryAvaliableMerchantList() {
 
-		return merchantConfigDao.querByAvaliableMerchantList(true, new Date());
+		return merchantConfigDao.querByAvaliableMerchantList(true);
 	}
 
 	/**
@@ -113,7 +112,7 @@ public class MerchantConfigServiceImpl implements MerchantConfigService, Cacheab
 				fromSystem,MerchantConfigEntity.class);
 		if (Objects.isNull(mce)) {
 			//若缓存不存在，则从数据库读取，并更新缓存
-			mce = merchantConfigDao.queryByMerchant(fromSystem, true, new Date());
+			mce = merchantConfigDao.queryByMerchant(fromSystem, true);
 			cacheUtils.setCacheByRediskeynameAndKey(UPS_MERCHANT_CACHE, fromSystem,mce);
 		}
 		return mce;

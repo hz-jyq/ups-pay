@@ -8,4 +8,9 @@ public interface MerchantConfigService {
 	
 	PageInfo<MerchantConfigEntity> queryByForm(MerchantConfigForm form);
 
+	void enableMerchantConfig(Long id);
+	
+	void disableMerchantConfig(Long id);
+
+
 }

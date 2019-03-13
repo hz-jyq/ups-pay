@@ -10,7 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -58,8 +58,15 @@ public class UpsOrderTypeEntity extends Model{
 	private String updateUser;
 	
 	@JsonIgnore
-	@ManyToMany(mappedBy="orderTypeList",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-	private List<MerchantConfigEntity> merchantConfigList;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "upsOrderTypeEntity")
+	private List<MerchantOrderTypeEntity> merchantOrderTypeList;
+	
+
+	/*@ManyToMany(mappedBy="orderTypeList",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	private List<MerchantConfigEntity> merchantConfigList;*/
+	
+	
+	
 
 	public Long getId() {
 		return id;
@@ -133,12 +140,13 @@ public class UpsOrderTypeEntity extends Model{
 		this.updateUser = updateUser;
 	}
 
-	public List<MerchantConfigEntity> getMerchantConfigList() {
-		return merchantConfigList;
+	public List<MerchantOrderTypeEntity> getMerchantOrderTypeList() {
+		return merchantOrderTypeList;
 	}
 
-	public void setMerchantConfigList(List<MerchantConfigEntity> merchantConfigList) {
-		this.merchantConfigList = merchantConfigList;
+	public void setMerchantOrderTypeList(List<MerchantOrderTypeEntity> merchantOrderTypeList) {
+		this.merchantOrderTypeList = merchantOrderTypeList;
 	}
+
 	
 }

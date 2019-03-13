@@ -1,6 +1,5 @@
 package com.pgy.ups.pay.commom.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,8 +17,8 @@ public interface MerchantConfigDao extends JpaRepository<MerchantConfigEntity, L
 	 * @param fromSystem available date
 	 * @return
 	 */
-	@Query(value="select c from MerchantConfigEntity c where c.merchantName=?1 and c.available =?2 and (?3 between c.startTime and c.endTime)")
-	MerchantConfigEntity queryByMerchant(String fromSystem, boolean available, Date date);
+	@Query(value="select c from MerchantConfigEntity c where c.merchantName=?1 and c.available =?2")
+	MerchantConfigEntity queryByMerchant(String fromSystem, boolean available);
 	
     
 	/**
@@ -28,7 +27,7 @@ public interface MerchantConfigDao extends JpaRepository<MerchantConfigEntity, L
 	 * @param available date
 	 * @return
 	 */
-	@Query(value="select c from MerchantConfigEntity c where c.available =?1 and (?2 between c.startTime and c.endTime)")
-	List<MerchantConfigEntity> querByAvaliableMerchantList(boolean available, Date date);
+	@Query(value="select c from MerchantConfigEntity c where c.available =?1")
+	List<MerchantConfigEntity> querByAvaliableMerchantList(boolean available);
 
 }

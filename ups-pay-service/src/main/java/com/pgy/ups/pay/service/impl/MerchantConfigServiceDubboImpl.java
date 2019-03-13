@@ -20,8 +20,21 @@ public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
 	@Override
 	public PageInfo<MerchantConfigEntity> queryByForm(MerchantConfigForm form) {
 		Page<MerchantConfigEntity> page = merchantConfigDao.findByForm( form.getMerchantCode(),form.getMerchantName(),
-				form.getPageRequest());
+				form.getDescription(),form.getPageRequest());
 		return new PageInfo<>(page);
+	}
+
+
+	@Override
+	public void enableMerchantConfig(Long id) {
+		merchantConfigDao.enableMerchantConfig(id);
+		
+	}
+
+	@Override
+	public void disableMerchantConfig(Long id) {
+		merchantConfigDao.disableMerchantConfig(id);
+		
 	}
 
 }

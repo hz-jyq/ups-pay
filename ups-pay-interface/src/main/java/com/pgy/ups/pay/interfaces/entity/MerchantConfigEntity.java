@@ -10,9 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,14 +48,6 @@ public class MerchantConfigEntity extends Model {
 	@Column(name = "available", columnDefinition = "bit")
 	private Boolean available;
 
-	@Column(name = "start_time")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date startTime;
-
-	@Column(name = "end_time")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date endTime;
-
 	@Column(name = "merchant_public_key")
 	private String merchantPublicKey;
 
@@ -78,9 +68,12 @@ public class MerchantConfigEntity extends Model {
 	@Column(name = "update_user")
 	private String updateUser;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	/*@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "ups_t_merchant_order_type", joinColumns = @JoinColumn(name = "merchant_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "order_type_id", referencedColumnName = "id"))
-	private List<UpsOrderTypeEntity> orderTypeList;
+	private List<UpsOrderTypeEntity> orderTypeList;*/
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "merchantConfigEntity")
+	private List<MerchantOrderTypeEntity> merchantOrderTypeList;
 
 	public Long getId() {
 		return id;
@@ -114,21 +107,6 @@ public class MerchantConfigEntity extends Model {
 		this.available = available;
 	}
 
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
 
 	public String getMerchantPublicKey() {
 		return merchantPublicKey;
@@ -186,12 +164,12 @@ public class MerchantConfigEntity extends Model {
 		this.description = description;
 	}
 
-	public List<UpsOrderTypeEntity> getOrderTypeList() {
-		return orderTypeList;
+	public List<MerchantOrderTypeEntity> getMerchantOrderTypeList() {
+		return merchantOrderTypeList;
 	}
 
-	public void setOrderTypeList(List<UpsOrderTypeEntity> orderTypeList) {
-		this.orderTypeList = orderTypeList;
+	public void setMerchantOrderTypeList(List<MerchantOrderTypeEntity> merchantOrderTypeList) {
+		this.merchantOrderTypeList = merchantOrderTypeList;
 	}
-
+	
 }
