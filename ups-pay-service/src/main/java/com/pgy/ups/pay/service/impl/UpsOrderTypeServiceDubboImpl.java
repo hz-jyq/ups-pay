@@ -19,6 +19,12 @@ public class UpsOrderTypeServiceDubboImpl implements UpsOrderTypeService{
 	public List<UpsOrderTypeEntity> getAllOrderType() {
 		return orderTypeDubboDao.findAll();
 	}
+
+	@Override
+	public UpsOrderTypeEntity queryOrderTypeById(Long orderTypeId) {
+		
+		return orderTypeDubboDao.findById(orderTypeId).orElse(null);
+	}
 	
 	
 

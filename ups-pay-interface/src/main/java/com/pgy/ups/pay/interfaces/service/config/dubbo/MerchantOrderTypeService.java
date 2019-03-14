@@ -4,6 +4,10 @@ import com.pgy.ups.pay.interfaces.form.MerchantOrderTypeForm;
 
 public interface MerchantOrderTypeService {
 
-	void createMerchantOrderType(MerchantOrderTypeForm form);
+	boolean createMerchantOrderType(MerchantOrderTypeForm form);
+
+	void deleteMerchantOrderType(Long id);
+
+	boolean updateMerchantOrderType(MerchantOrderTypeForm form);
 
 }

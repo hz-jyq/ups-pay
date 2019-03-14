@@ -17,7 +17,7 @@ public interface MerchantConfigDubboDao extends JpaRepository<MerchantConfigEnti
 
 	@Query(value = "SELECT * FROM ups_t_merchant_config c  WHERE IF (?1 != '',c.merchant_code =?1,1=1) AND IF (?2 !='',c.merchant_name LIKE %?2% ,1=1)  AND IF (?3 !='',c.description LIKE %?3% ,1=1) ORDER BY c.id DESC", nativeQuery = true)
 	Page<MerchantConfigEntity> findByForm(String merchantCode, String merchantName, String description,
-			Pageable pageRequest);
+			Pageable pageable);
 
 	@Modifying
 	@Transactional
@@ -27,6 +27,11 @@ public interface MerchantConfigDubboDao extends JpaRepository<MerchantConfigEnti
 	@Modifying
 	@Transactional
 	@Query("UPDATE MerchantConfigEntity e SET e.merchantCode=:#{#form.merchantCode},e.merchantName=:#{#form.merchantName},e.description=:#{#form.description},e.merchantPublicKey=:#{#form.merchantPublicKey},e.upsPrivateKey=:#{#form.upsPrivateKey},e.updateUser=:#{#form.updateUser},e.updateTime=NOW() WHERE e.id=:#{#form.id}")
-	void updateById(@Param("form") MerchantConfigForm form);
+	void updateMerchantConfig(@Param("form") MerchantConfigForm form);
+
+	MerchantConfigEntity queryByMerchantCode(String merchantCode);
+
+	MerchantConfigEntity queryByMerchantName(String merchantName);
+
 
 }

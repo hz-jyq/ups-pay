@@ -13,4 +13,6 @@ public interface UpsOrderTypeService {
 	
 	List<UpsOrderTypeEntity> getAllOrderType();
 
+	UpsOrderTypeEntity queryOrderTypeById(Long orderTypeId);
+
 }

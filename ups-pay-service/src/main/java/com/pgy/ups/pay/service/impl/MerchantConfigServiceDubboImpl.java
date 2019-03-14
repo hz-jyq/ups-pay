@@ -1,6 +1,7 @@
 package com.pgy.ups.pay.service.impl;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -25,8 +26,8 @@ public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
 
 	@Override
 	public PageInfo<MerchantConfigEntity> queryByForm(MerchantConfigForm form) {
-		Page<MerchantConfigEntity> page = merchantConfigDubboDao.findByForm(form.getMerchantCode(), form.getMerchantName(),
-				form.getDescription(), form.getPageRequest());
+		Page<MerchantConfigEntity> page = merchantConfigDubboDao.findByForm(form.getMerchantCode(),
+				form.getMerchantName(), form.getDescription(), form.getPageRequest());
 		return new PageInfo<>(page);
 	}
 
@@ -55,7 +56,7 @@ public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
 	@Override
 	public boolean updateById(MerchantConfigForm form) {
 		try {
-			merchantConfigDubboDao.updateById(form);
+			merchantConfigDubboDao.updateMerchantConfig(form);
 			return true;
 		} catch (Exception e) {
 			logger.error("修改商户配置异常：{}", e);
@@ -65,24 +66,29 @@ public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
 
 	@Override
 	public MerchantConfigEntity createmerchantConfig(MerchantConfigForm form) {
-		try {
-			MerchantConfigEntity mce = new MerchantConfigEntity();
-			mce.setCreateTime(new Date());
-			mce.setCreateUser(form.getCreateUser());
-			mce.setDescription(form.getDescription());
-			mce.setMerchantCode(form.getMerchantCode());
-			mce.setMerchantName(form.getMerchantName());
-			mce.setMerchantPublicKey(form.getMerchantPublicKey());
-			mce.setUpdateTime(new Date());
-			mce.setUpdateUser(form.getUpdateUser());
-			mce.setUpsPrivateKey(form.getUpsPrivateKey());
-			mce.setAvailable(false);
-			return merchantConfigDubboDao.saveAndFlush(mce);
-		} catch (Exception e) {
-			logger.error("新增商户配置异常：{}", e);
+
+		MerchantConfigEntity mce = merchantConfigDubboDao.queryByMerchantCode(form.getMerchantCode());
+		if (Objects.nonNull(mce)) {
+			logger.info("新增商户配置失败，商户编码不能重复");
 			return null;
 		}
-
+		mce = merchantConfigDubboDao.queryByMerchantName(form.getMerchantName());
+		if (Objects.nonNull(mce)) {
+			logger.info("新增商户配置失败，商户名称不能重复");
+			return null;
+		}
+		mce = new MerchantConfigEntity();
+		mce.setCreateTime(new Date());
+		mce.setCreateUser(form.getCreateUser());
+		mce.setDescription(form.getDescription());
+		mce.setMerchantCode(form.getMerchantCode());
+		mce.setMerchantName(form.getMerchantName());
+		mce.setMerchantPublicKey(form.getMerchantPublicKey());
+		mce.setUpdateTime(new Date());
+		mce.setUpdateUser(form.getUpdateUser());
+		mce.setUpsPrivateKey(form.getUpsPrivateKey());
+		mce.setAvailable(false);
+		return merchantConfigDubboDao.saveAndFlush(mce);
 	}
 
 }
