@@ -54,7 +54,7 @@ public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
 	}
 
 	@Override
-	public boolean updateById(MerchantConfigForm form) {
+	public boolean updateMerchantConfig(MerchantConfigForm form) {
 		try {
 			merchantConfigDubboDao.updateMerchantConfig(form);
 			return true;

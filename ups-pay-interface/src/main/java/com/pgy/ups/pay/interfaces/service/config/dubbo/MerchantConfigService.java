@@ -16,9 +16,9 @@ public interface MerchantConfigService {
 
 	MerchantConfigEntity queryMerchantConfig(Long id);
 
-	boolean updateById(MerchantConfigForm form);
-
 	MerchantConfigEntity createmerchantConfig(MerchantConfigForm form);
+
+	boolean updateMerchantConfig(MerchantConfigForm form);
 
 
 }
