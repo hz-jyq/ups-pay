@@ -12,10 +12,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
-@Repository("upsOrderDubboDao")
+@Repository
 public interface UpsOrderDubboDao extends JpaRepository<UpsOrderEntity, Long> {
 
-    @Query(value = "SELECT * FROM UpsOrderEntity c  WHERE IF (#{#form.fromSystem} != '',c.fromSystem = :#{#form.fromSystem} ,1=1) AND IF (#{#form.orderType} !='',c.orderType = :#{#form.orderType} ,1=1)  AND IF (#{#form.bankMd5} !='',c.bankMd5 = :#{#form.bankMd5},1=1) ORDER BY c.id DESC", nativeQuery = true)
+    @Query(value = "  FROM UpsOrderEntity c  WHERE c.fromSystem = :#{#form.fromSystem} AND       c.orderType = (CASE WHEN :#{#form.orderType} is null THEN true ELSE :#{#form.orderType} END)  AND c.bankMd5 = (CASE WHEN :#{#form.bankMd5} is null THEN true ELSE :#{#form.bankMd5} END)  ORDER BY c.id DESC")
     Page<UpsOrderEntity> getPage(@Param("form") UpsOrderForm form, Pageable pageable);
 
 }
