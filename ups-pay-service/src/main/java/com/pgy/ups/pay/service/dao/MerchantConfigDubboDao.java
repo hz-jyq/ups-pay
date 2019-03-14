@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pgy.ups.pay.interfaces.entity.MerchantConfigEntity;
 import com.pgy.ups.pay.interfaces.form.MerchantConfigForm;
 
-@Repository("MerchantConfigDubboDao")
-public interface MerchantConfigDao extends JpaRepository<MerchantConfigEntity, Long> {
+@Repository
+public interface MerchantConfigDubboDao extends JpaRepository<MerchantConfigEntity, Long> {
 
 	@Query(value = "SELECT * FROM ups_t_merchant_config c  WHERE IF (?1 != '',c.merchant_code =?1,1=1) AND IF (?2 !='',c.merchant_name LIKE %?2% ,1=1)  AND IF (?3 !='',c.description LIKE %?3% ,1=1) ORDER BY c.id DESC", nativeQuery = true)
 	Page<MerchantConfigEntity> findByForm(String merchantCode, String merchantName, String description,
