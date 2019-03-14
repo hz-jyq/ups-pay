@@ -4,8 +4,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.pgy.ups.common.page.PageInfo;
+import com.pgy.ups.pay.interfaces.entity.UpsBankEntity;
+import com.pgy.ups.pay.interfaces.form.UpsBankForm;
+import com.pgy.ups.pay.interfaces.service.config.dubbo.BankConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +42,9 @@ public class TestController {
 	
 	
 	private Logger logger=LoggerFactory.getLogger(TestController.class);
+
+	@Resource
+	private BankConfigService  bankConfigService;
 
 	/**
 	 * 測試接口
@@ -138,5 +146,6 @@ public class TestController {
 		return resultMap;
 		
 	}
+
 
 }

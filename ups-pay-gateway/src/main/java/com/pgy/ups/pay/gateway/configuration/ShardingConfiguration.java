@@ -1,29 +1,24 @@
 package com.pgy.ups.pay.gateway.configuration;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.sql.DataSource;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-
-import com.alibaba.druid.pool.DruidDataSource;
-
 import io.shardingsphere.api.algorithm.sharding.PreciseShardingValue;
 import io.shardingsphere.api.algorithm.sharding.standard.PreciseShardingAlgorithm;
 import io.shardingsphere.api.config.ShardingRuleConfiguration;
 import io.shardingsphere.api.config.TableRuleConfiguration;
 import io.shardingsphere.api.config.strategy.StandardShardingStrategyConfiguration;
 import io.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 public class ShardingConfiguration {
@@ -35,23 +30,14 @@ public class ShardingConfiguration {
     
 	//不分库不要动这个字段
 	private String databaseName = "ups-pay";
-	
-	@Value("${druid.config.path}")
-	private String druidConfig;
+
+
+	@Resource(name = "druidDataSource")
+    private  DataSource dataSource;
 
 	
 	@Bean("dataSource")
 	public DataSource getShardingDataSource() {
-
-		Properties pro = new Properties();
-		try {
-			pro.load(new ClassPathResource(druidConfig).getInputStream());
-		} catch (Exception e) {
-			logger.error("druid.properties读取失败：{}", e);
-			throw new RuntimeException("druid.properties读取失败");
-		}
-		DruidDataSource dataSource = new DruidDataSource();
-		dataSource.configFromPropety(pro);
 
 		// 配置分片规则
 		ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
@@ -102,7 +88,7 @@ public class ShardingConfiguration {
 		return sb.toString();
 	}
 
-}
+
 
 /**
  * 通过来源商户名分表
@@ -120,5 +106,6 @@ class MyTableShardingAlgorithm implements PreciseShardingAlgorithm<String> {
 		}
 		return null;
 	}
+}
 
 }
