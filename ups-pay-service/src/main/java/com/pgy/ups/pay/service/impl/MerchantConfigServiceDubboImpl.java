@@ -13,49 +13,49 @@ import com.pgy.ups.common.page.PageInfo;
 import com.pgy.ups.pay.interfaces.entity.MerchantConfigEntity;
 import com.pgy.ups.pay.interfaces.form.MerchantConfigForm;
 import com.pgy.ups.pay.interfaces.service.config.dubbo.MerchantConfigService;
-import com.pgy.ups.pay.service.dao.MerchantConfigDao;
+import com.pgy.ups.pay.service.dao.MerchantConfigDubboDao;
 
 @Service
 public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
 
 	private Logger logger = LoggerFactory.getLogger(MerchantConfigServiceDubboImpl.class);
 
-	@Resource(name = "MerchantConfigDubboDao")
-	private MerchantConfigDao merchantConfigDao;
+	@Resource
+	private MerchantConfigDubboDao merchantConfigDubboDao;
 
 	@Override
 	public PageInfo<MerchantConfigEntity> queryByForm(MerchantConfigForm form) {
-		Page<MerchantConfigEntity> page = merchantConfigDao.findByForm(form.getMerchantCode(), form.getMerchantName(),
+		Page<MerchantConfigEntity> page = merchantConfigDubboDao.findByForm(form.getMerchantCode(), form.getMerchantName(),
 				form.getDescription(), form.getPageRequest());
 		return new PageInfo<>(page);
 	}
 
 	@Override
 	public void enableMerchantConfig(Long id) {
-		merchantConfigDao.enableOrDisableMerchantConfig(id, true);
+		merchantConfigDubboDao.enableOrDisableMerchantConfig(id, true);
 
 	}
 
 	@Override
 	public void disableMerchantConfig(Long id) {
-		merchantConfigDao.enableOrDisableMerchantConfig(id, false);
+		merchantConfigDubboDao.enableOrDisableMerchantConfig(id, false);
 
 	}
 
 	@Override
 	public void deleteMerchantConfig(Long id) {
-		merchantConfigDao.deleteById(id);
+		merchantConfigDubboDao.deleteById(id);
 	}
 
 	@Override
 	public MerchantConfigEntity queryMerchantConfig(Long id) {
-		return merchantConfigDao.findById(id).orElse(null);
+		return merchantConfigDubboDao.findById(id).orElse(null);
 	}
 
 	@Override
 	public boolean updateById(MerchantConfigForm form) {
 		try {
-			merchantConfigDao.updateById(form);
+			merchantConfigDubboDao.updateById(form);
 			return true;
 		} catch (Exception e) {
 			logger.error("修改商户配置异常：{}", e);
@@ -77,7 +77,7 @@ public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
 			mce.setUpdateUser(form.getUpdateUser());
 			mce.setUpsPrivateKey(form.getUpsPrivateKey());
 			mce.setAvailable(false);
-			return merchantConfigDao.saveAndFlush(mce);
+			return merchantConfigDubboDao.saveAndFlush(mce);
 		} catch (Exception e) {
 			logger.error("新增商户配置异常：{}", e);
 			return null;

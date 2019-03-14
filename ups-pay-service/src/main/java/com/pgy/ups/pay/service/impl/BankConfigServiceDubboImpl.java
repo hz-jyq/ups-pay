@@ -11,7 +11,8 @@ import com.pgy.ups.common.page.PageInfo;
 import com.pgy.ups.pay.interfaces.entity.UpsBankEntity;
 import com.pgy.ups.pay.interfaces.form.UpsBankForm;
 import com.pgy.ups.pay.interfaces.service.config.dubbo.BankConfigService;
-import com.pgy.ups.pay.service.dao.BankConfigDao;
+import com.pgy.ups.pay.service.dao.BankConfigDubboDao;
+
 
 /**
  * Hello world!
@@ -20,20 +21,20 @@ import com.pgy.ups.pay.service.dao.BankConfigDao;
 @Service
 public class BankConfigServiceDubboImpl implements BankConfigService {
 
-	@Resource(name="BankConfigDubboDao")
-	private BankConfigDao bankConfigDao;
+	@Resource
+	private BankConfigDubboDao bankConfigDubboDao;
 
 	@Override
 	public PageInfo<UpsBankEntity> queryByForm(UpsBankForm upsBankForm) {
 
-		Page<UpsBankEntity> page = bankConfigDao.findByForm(upsBankForm.getBankCode(), upsBankForm.getBankName(),
+		Page<UpsBankEntity> page = bankConfigDubboDao.findByForm(upsBankForm.getBankCode(), upsBankForm.getBankName(),
 				upsBankForm.getPageRequest());
 		return new PageInfo<>(page);
 	}
 
 	@Override
 	public void deleteBankConfigById(Long id) {
-		bankConfigDao.deleteById(id);
+		bankConfigDubboDao.deleteById(id);
 	}
 
 	@Override
@@ -45,7 +46,7 @@ public class BankConfigServiceDubboImpl implements BankConfigService {
 		entity.setUpdateTime(new Date());
 		entity.setCreateUser(form.getCreateUser());
 		entity.setUpdateUser(form.getUpdateUser());
-		return bankConfigDao.save(entity);
+		return bankConfigDubboDao.save(entity);
 	}
 
 }
