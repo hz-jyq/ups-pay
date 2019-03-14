@@ -1,24 +1,30 @@
 package com.pgy.ups.pay.gateway.configuration;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.sql.DataSource;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+
 import io.shardingsphere.api.algorithm.sharding.PreciseShardingValue;
 import io.shardingsphere.api.algorithm.sharding.standard.PreciseShardingAlgorithm;
 import io.shardingsphere.api.config.ShardingRuleConfiguration;
 import io.shardingsphere.api.config.TableRuleConfiguration;
 import io.shardingsphere.api.config.strategy.StandardShardingStrategyConfiguration;
 import io.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.Resource;
-import javax.sql.DataSource;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 public class ShardingConfiguration {
@@ -30,14 +36,17 @@ public class ShardingConfiguration {
     
 	//不分库不要动这个字段
 	private String databaseName = "ups-pay";
-
-
-	@Resource(name = "druidDataSource")
-    private  DataSource dataSource;
-
 	
+	
+	@Primary
+	@Bean(name="druidDataSource")
+	@ConfigurationProperties(prefix = "druid")
+	public DataSource getDataSource(){
+		return DruidDataSourceBuilder.create().build();
+	}
+
 	@Bean("dataSource")
-	public DataSource getShardingDataSource() {
+	public DataSource getShardingDataSource(@Qualifier("druidDataSource")DataSource dataSource) {
 
 		// 配置分片规则
 		ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();

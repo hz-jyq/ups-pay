@@ -7,10 +7,6 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import com.pgy.ups.common.page.PageInfo;
-import com.pgy.ups.pay.interfaces.entity.UpsBankEntity;
-import com.pgy.ups.pay.interfaces.form.UpsBankForm;
-import com.pgy.ups.pay.interfaces.service.config.dubbo.BankConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +22,7 @@ import com.pgy.ups.pay.interfaces.model.UpsBindCardParamModel;
 import com.pgy.ups.pay.interfaces.model.UpsCollectParamModel;
 import com.pgy.ups.pay.interfaces.model.UpsPayParamModel;
 import com.pgy.ups.pay.interfaces.model.UpsSignatureParamModel;
+import com.pgy.ups.pay.interfaces.service.config.dubbo.BankConfigService;
 
 /**
  * 支付网关

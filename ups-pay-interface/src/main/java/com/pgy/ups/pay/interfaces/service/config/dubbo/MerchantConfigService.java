@@ -14,5 +14,7 @@ public interface MerchantConfigService {
 
 	void deleteMerchantConfig(Long id);
 
+	MerchantConfigEntity queryMerchantConfig(Long id);
+
 
 }

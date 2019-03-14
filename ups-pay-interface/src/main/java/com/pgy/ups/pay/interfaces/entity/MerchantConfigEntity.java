@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -47,11 +48,13 @@ public class MerchantConfigEntity extends Model {
 
 	@Column(name = "available", columnDefinition = "bit")
 	private Boolean available;
-
-	@Column(name = "merchant_public_key")
+    
+	@Lob
+	@Column(name="merchant_public_key",columnDefinition="text")
 	private String merchantPublicKey;
-
-	@Column(name = "ups_private_key")
+    
+	@Lob
+	@Column(name = "ups_private_key",columnDefinition="text")
 	private String upsPrivateKey;
 
 	@Column(name = "create_time")

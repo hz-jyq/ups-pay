@@ -43,4 +43,10 @@ public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
 		merchantConfigDao.deleteById(id);	
 	}
 
+
+	@Override
+	public MerchantConfigEntity queryMerchantConfig(Long id) {
+		return merchantConfigDao.findById(id).orElse(null);
+	}
+
 }
