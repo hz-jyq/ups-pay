@@ -7,7 +7,11 @@ public class MerchantConfigForm extends BaseForm{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5539785880156428493L;
+	private static final long serialVersionUID = -1650698588716367390L;
+
+	/**
+	 * 
+	 */
 
 	private Long id;
 
@@ -18,13 +22,9 @@ public class MerchantConfigForm extends BaseForm{
 	private String description;
 
 	private Boolean available;
-
-	private Date startTime;
-
-	private Date endTime;
-
+    
 	private String merchantPublicKey;
-
+    
 	private String upsPrivateKey;
 
 	private Date createTime;
@@ -32,7 +32,7 @@ public class MerchantConfigForm extends BaseForm{
 	private Date updateTime;
 
 	private String createUser;
-
+	
 	private String updateUser;
 
 	public Long getId() {
@@ -73,22 +73,6 @@ public class MerchantConfigForm extends BaseForm{
 
 	public void setAvailable(Boolean available) {
 		this.available = available;
-	}
-
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
 	}
 
 	public String getMerchantPublicKey() {
@@ -137,6 +121,9 @@ public class MerchantConfigForm extends BaseForm{
 
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
-	}	
-
+	}
+	
+	
+	
+  
 }

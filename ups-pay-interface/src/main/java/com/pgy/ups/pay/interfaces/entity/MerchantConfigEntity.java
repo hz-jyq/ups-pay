@@ -10,7 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -48,12 +47,10 @@ public class MerchantConfigEntity extends Model {
 
 	@Column(name = "available", columnDefinition = "bit")
 	private Boolean available;
-    
-	@Lob
+    	
 	@Column(name="merchant_public_key",columnDefinition="text")
 	private String merchantPublicKey;
-    
-	@Lob
+    	
 	@Column(name = "ups_private_key",columnDefinition="text")
 	private String upsPrivateKey;
 
@@ -174,5 +171,7 @@ public class MerchantConfigEntity extends Model {
 	public void setMerchantOrderTypeList(List<MerchantOrderTypeEntity> merchantOrderTypeList) {
 		this.merchantOrderTypeList = merchantOrderTypeList;
 	}
+	
+	
 	
 }

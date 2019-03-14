@@ -4,7 +4,7 @@ import com.pgy.ups.pay.interfaces.model.Model;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-@SuppressWarnings("serial")
+
 public abstract class BaseForm extends Model {
 
 	private int pageNumber = 1;
