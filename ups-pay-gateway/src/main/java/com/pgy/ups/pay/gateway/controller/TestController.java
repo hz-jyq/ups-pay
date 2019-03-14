@@ -7,6 +7,10 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.pgy.ups.common.page.PageInfo;
+import com.pgy.ups.pay.interfaces.entity.UpsOrderEntity;
+import com.pgy.ups.pay.interfaces.form.UpsOrderForm;
+import com.pgy.ups.pay.interfaces.service.order.dubbo.UpsOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,8 +44,14 @@ public class TestController {
 	
 	private Logger logger=LoggerFactory.getLogger(TestController.class);
 
+
 	@Resource
 	private BankConfigService  bankConfigService;
+
+
+	@Resource
+	private UpsOrderService upsOrderService;
+
 
 	/**
 	 * 測試接口
@@ -144,5 +154,15 @@ public class TestController {
 		
 	}
 
+	/**
+	 * 推送回调测试接口
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/testReturn1.do")
+	public PageInfo<UpsOrderEntity> testCallback1(UpsOrderForm form){
+	  return  	upsOrderService.getUpsOrder(form);
+	}
 
 }
