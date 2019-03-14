@@ -38,13 +38,14 @@ public class ShardingConfiguration {
 	private String databaseName = "ups-pay";
 	
 	
-	@Primary
+	
 	@Bean(name="druidDataSource")
 	@ConfigurationProperties(prefix = "druid")
 	public DataSource getDataSource(){
 		return DruidDataSourceBuilder.create().build();
 	}
-
+    
+	@Primary
 	@Bean("dataSource")
 	public DataSource getShardingDataSource(@Qualifier("druidDataSource")DataSource dataSource) {
 
