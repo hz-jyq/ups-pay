@@ -162,7 +162,7 @@ public class TestController {
 	@ResponseBody
 	@RequestMapping("/testReturn1.do")
 	public PageInfo<UpsOrderEntity> testCallback1(UpsOrderForm form){
-	  return  	upsOrderService.getUpsOrder(form);
+	  return  	upsOrderService.queryByForm(form);
 	}
 
 }

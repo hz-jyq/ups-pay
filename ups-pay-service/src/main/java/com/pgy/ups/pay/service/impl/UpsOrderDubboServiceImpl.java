@@ -18,7 +18,7 @@ public class UpsOrderDubboServiceImpl implements UpsOrderService {
     private UpsOrderDubboDao upsOrderDubboDao;
 
     @Override
-    public PageInfo<UpsOrderEntity> getUpsOrder(UpsOrderForm form) {
+    public PageInfo<UpsOrderEntity> queryByForm(UpsOrderForm form) {
         return  new PageInfo<>(upsOrderDubboDao.getPage(form,form.getPageRequest()));
     }
 }

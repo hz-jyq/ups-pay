@@ -14,5 +14,5 @@ import com.pgy.ups.pay.interfaces.model.UpsParamModel;
 public interface UpsOrderService {
 
 	//查询订单
-	PageInfo<UpsOrderEntity> getUpsOrder(UpsOrderForm form);
+	PageInfo<UpsOrderEntity> queryByForm(UpsOrderForm form);
 }
