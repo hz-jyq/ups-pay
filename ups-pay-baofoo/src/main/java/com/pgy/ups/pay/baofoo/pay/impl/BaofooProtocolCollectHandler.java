@@ -37,7 +37,7 @@ import com.pgy.ups.pay.interfaces.entity.UpsThirdpartyLogEntity;
 import com.pgy.ups.pay.interfaces.enums.UpsResultEnum;
 import com.pgy.ups.pay.interfaces.model.UpsResultModel;
 import com.pgy.ups.pay.interfaces.pay.BussinessHandler;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignService;
 import com.pgy.ups.pay.interfaces.service.log.UpsThirdpartyLogService;
 import com.pgy.ups.pay.interfaces.service.order.UpsOrderService;
 
