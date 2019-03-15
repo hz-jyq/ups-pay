@@ -19,7 +19,3 @@ public interface UpsOrderDubboDao extends JpaRepository<UpsOrderEntity, Long> {
     Page<UpsOrderEntity> getPage(@Param("form") UpsOrderForm form, Pageable pageable);
 
 }
-/**
- *  AND       c.orderType = (CASE WHEN :#{#form.orderType} is null THEN true ELSE :#{#form.orderType} END)  AND c.bankMd5 = (CASE WHEN :#{#form.bankMd5} is null THEN true ELSE :#{#form.bankMd5} END)  ORDER BY c.id DESC
- *
- * **/
