@@ -66,8 +66,6 @@ public class UpsOrderTypeEntity extends Model{
 	private List<MerchantConfigEntity> merchantConfigList;*/
 	
 	
-	
-
 	public Long getId() {
 		return id;
 	}

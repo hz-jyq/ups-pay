@@ -1,23 +1,31 @@
 package com.pgy.ups.pay.interfaces.form;
 
-import com.pgy.ups.pay.interfaces.model.Model;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import com.pgy.ups.pay.interfaces.model.Model;
+
+
 
 
 @SuppressWarnings("serial")
 public abstract class BaseForm extends Model {
 
-	private int pageNumber = 1;
+	private int pageNum = 1;
 
 	private int pageSize = 10;
 
-	public int getPageNumber() {
-		return pageNumber;
+
+	public int getPageNum() {
+		return pageNum;
 	}
 
-	public void setPageNumber(int pageNumber) {
-		this.pageNumber = pageNumber;
+	public void setPageNum(int pageNum) {
+		this.pageNum = pageNum;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 	}
 
 	public Integer getPageSize() {
@@ -29,7 +37,7 @@ public abstract class BaseForm extends Model {
 	}
 
 	public Pageable getPageRequest(){
-		return  PageRequest.of(pageNumber - 1,pageSize);
+		return  PageRequest.of(pageNum - 1,pageSize);
 	}
 
 }

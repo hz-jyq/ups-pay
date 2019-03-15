@@ -1,6 +1,7 @@
 package com.pgy.ups.pay.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Resource;
@@ -89,6 +90,11 @@ public class MerchantConfigDubboServiceImpl implements MerchantConfigService {
 		mce.setUpsPrivateKey(form.getUpsPrivateKey());
 		mce.setAvailable(false);
 		return merchantConfigDubboDao.saveAndFlush(mce);
+	}
+
+	@Override
+	public List<MerchantConfigEntity> findAll() {
+		return merchantConfigDubboDao.findAll();
 	}
 
 }

@@ -22,6 +22,10 @@ public class MerchantOrderTypeForm extends BaseForm{
     private Date startTime;
 
     private Date endTime;
+    
+    private Date updateTime;
+    
+    private String updateUser;
 
 	public Long getId() {
 		return id;
@@ -78,5 +82,21 @@ public class MerchantOrderTypeForm extends BaseForm{
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-    
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public String getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
+	}
+	
 }

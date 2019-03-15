@@ -1,5 +1,6 @@
 package com.pgy.ups.pay.service.impl;
 
+import java.util.Date;
 import java.util.Objects;
 
 import javax.annotation.Resource;
@@ -45,6 +46,9 @@ public class MerchantOrderTypeDubboServiceImpl implements MerchantOrderTypeServi
 			logger.info("保存失败，该商户已经有该支付产品：{}", mote);
 			return false;
 		}
+		mote.setUpdateTime(new Date());
+		mote.setRouteStatus(MerchantOrderTypeService.OPEN_DEFAULT);
+		mote.setUpdateUser(form.getUpdateUser());
 		mote.setEndTime(form.getEndTime());
 		mote.setStartTime(form.getStartTime());
 		merchantOrderTypeDubboDao.saveAndFlush(mote);
@@ -71,12 +75,42 @@ public class MerchantOrderTypeDubboServiceImpl implements MerchantOrderTypeServi
 	@Override
 	public PageInfo<MerchantOrderTypeEntity> queryMerchantOrderTypeForPage(MerchantOrderTypeForm form) {
 		MerchantOrderTypeEntity mote = new MerchantOrderTypeEntity();
-		mote.setMerchantConfigEntity(merchantConfigService.queryMerchantConfig(form.getMerchantId()));
-		mote.setUpsOrderTypeEntity(upsOrderTypeService.queryOrderTypeById(form.getOrderTypeId()));
+		if(form.getMerchantId()!=null) {
+			mote.setMerchantConfigEntity(merchantConfigService.queryMerchantConfig(form.getMerchantId()));
+		}
+		if(form.getOrderTypeId()!=null) {
+			mote.setUpsOrderTypeEntity(upsOrderTypeService.queryOrderTypeById(form.getOrderTypeId()));
+		}		
 		mote.setRouteStatus(form.getRouteStatus());
 		mote.setDefaultPayChannel(form.getDefaultPayChannel());
 		Page<MerchantOrderTypeEntity> page = merchantOrderTypeDubboDao.findAll(Example.of(mote), form.getPageRequest());
 		return new PageInfo<>(page);
+	}
+
+	@Override
+	public boolean openDefaultOrRoute(Long id, String openDefault,String updateUser) {
+		MerchantOrderTypeEntity entity=merchantOrderTypeDubboDao.findById(id).orElse(null);
+		if(Objects.isNull(entity)) {
+			return false;
+		}
+		entity.setUpdateTime(new Date());
+		entity.setUpdateUser(updateUser);
+		entity.setRouteStatus(openDefault);
+		merchantOrderTypeDubboDao.save(entity);	
+		return true;
+	}
+
+	@Override
+	public boolean updateMerchantRouteConfig(MerchantOrderTypeForm form) {
+		MerchantOrderTypeEntity entity=merchantOrderTypeDubboDao.findById(form.getId()).orElse(null);
+		if(Objects.isNull(entity)) {
+			return false;
+		}
+		entity.setUpdateUser(form.getUpdateUser());
+		entity.setDefaultPayChannel(form.getDefaultPayChannel());
+		entity.setUpdateTime(new Date());
+		merchantOrderTypeDubboDao.save(entity);	
+		return true;
 	}
 
 }

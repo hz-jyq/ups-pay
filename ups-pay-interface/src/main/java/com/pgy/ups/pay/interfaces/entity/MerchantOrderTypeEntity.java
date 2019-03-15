@@ -38,12 +38,19 @@ public  class MerchantOrderTypeEntity extends Model {
 
     @Column(name = "start_time")
     @Temporal(TemporalType.TIMESTAMP)
-    protected Date startTime;
+    private Date startTime;
 
     @Column(name = "end_time")
     @Temporal(TemporalType.TIMESTAMP)
-    protected Date endTime;
-
+    private Date endTime;
+    
+    @Column(name = "update_time")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updateTime;
+    
+    @Column(name = "update_user")
+    private String updateUser;
+    
 	public Long getId() {
 		return id;
 	}
@@ -101,5 +108,22 @@ public  class MerchantOrderTypeEntity extends Model {
 		this.endTime = endTime;
 	}
 
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public String getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
+	}
+	
+	
 
 }

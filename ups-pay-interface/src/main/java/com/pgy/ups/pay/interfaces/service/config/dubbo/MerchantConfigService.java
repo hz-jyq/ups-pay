@@ -1,5 +1,7 @@
 package com.pgy.ups.pay.interfaces.service.config.dubbo;
 
+import java.util.List;
+
 import com.pgy.ups.common.page.PageInfo;
 import com.pgy.ups.pay.interfaces.entity.MerchantConfigEntity;
 import com.pgy.ups.pay.interfaces.form.MerchantConfigForm;
@@ -19,6 +21,8 @@ public interface MerchantConfigService {
 	MerchantConfigEntity createMerchantConfig(MerchantConfigForm form);
 
 	boolean updateMerchantConfig(MerchantConfigForm form);
+
+	List<MerchantConfigEntity> findAll();
 
 
 }
