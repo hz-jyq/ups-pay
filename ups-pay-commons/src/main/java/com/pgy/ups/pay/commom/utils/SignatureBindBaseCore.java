@@ -9,8 +9,8 @@ import com.pgy.ups.pay.interfaces.entity.UpsAuthSignEntity;
 import com.pgy.ups.pay.interfaces.entity.UpsUserSignLogEntity;
 import com.pgy.ups.pay.interfaces.enums.SignTypeEnum;
 import com.pgy.ups.pay.interfaces.model.UpsParamModel;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignLogService;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignLogService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

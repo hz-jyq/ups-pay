@@ -28,7 +28,7 @@ import com.pgy.ups.pay.interfaces.enums.SignTypeEnum;
 import com.pgy.ups.pay.interfaces.model.UpsResultModel;
 import com.pgy.ups.pay.interfaces.model.UpsSignatureParamModel;
 import com.pgy.ups.pay.interfaces.pay.BussinessHandler;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignService;
 import com.pgy.ups.pay.interfaces.service.config.UpsThirdpartyConfigService;
 
 @Service(group="baofooProtocolSignature",timeout=60000,retries=0)

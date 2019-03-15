@@ -29,7 +29,7 @@ import com.pgy.ups.pay.interfaces.enums.SignTypeEnum;
 import com.pgy.ups.pay.interfaces.model.UpsBindCardParamModel;
 import com.pgy.ups.pay.interfaces.model.UpsResultModel;
 import com.pgy.ups.pay.interfaces.pay.BussinessHandler;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignService;
 import com.pgy.ups.pay.interfaces.service.config.UpsThirdpartyConfigService;
 
 /**

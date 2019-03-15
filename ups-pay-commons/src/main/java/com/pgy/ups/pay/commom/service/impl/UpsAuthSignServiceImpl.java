@@ -11,7 +11,7 @@ import com.pgy.ups.pay.commom.dao.UpsAuthSignDao;
 import com.pgy.ups.pay.interfaces.entity.UpsAuthSignEntity;
 import com.pgy.ups.pay.interfaces.enums.SignTypeEnum;
 import com.pgy.ups.pay.interfaces.model.UpsUnBindCardModel;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignService;
 
 import java.util.Date;
 import java.util.Optional;
