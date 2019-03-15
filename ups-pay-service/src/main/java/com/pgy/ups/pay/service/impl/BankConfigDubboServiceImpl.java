@@ -19,7 +19,7 @@ import com.pgy.ups.pay.service.dao.BankConfigDubboDao;
  *
  */
 @Service
-public class BankConfigServiceDubboImpl implements BankConfigService {
+public class BankConfigDubboServiceImpl implements BankConfigService {
 
 	@Resource
 	private BankConfigDubboDao bankConfigDubboDao;

@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -22,7 +21,6 @@ import com.pgy.ups.pay.interfaces.model.UpsBindCardParamModel;
 import com.pgy.ups.pay.interfaces.model.UpsCollectParamModel;
 import com.pgy.ups.pay.interfaces.model.UpsPayParamModel;
 import com.pgy.ups.pay.interfaces.model.UpsSignatureParamModel;
-import com.pgy.ups.pay.interfaces.service.config.dubbo.BankConfigService;
 
 /**
  * 支付网关
@@ -40,8 +38,6 @@ public class TestController {
 	
 	private Logger logger=LoggerFactory.getLogger(TestController.class);
 
-	@Resource
-	private BankConfigService  bankConfigService;
 
 	/**
 	 * 測試接口

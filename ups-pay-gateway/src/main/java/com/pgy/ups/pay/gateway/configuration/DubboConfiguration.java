@@ -1,22 +1,19 @@
 package com.pgy.ups.pay.gateway.configuration;
 
-import com.alibaba.dubbo.config.ProtocolConfig;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ConsumerConfig;
+import com.alibaba.dubbo.config.ProtocolConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
 
 @Configuration
+@EnableConfigurationProperties(DubboProperties.class)
 @DubboComponentScan("com.pgy.ups.pay.service.**")
 public class DubboConfiguration {
-
-	@Bean
-	public DubboProperties getDubboProperties() {
-		return new DubboProperties();
-	}
 
 	@Bean
 	public ApplicationConfig applicationConfig(DubboProperties dubboProperties) {

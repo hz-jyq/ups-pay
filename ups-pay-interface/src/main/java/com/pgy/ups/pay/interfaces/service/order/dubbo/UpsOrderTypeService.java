@@ -15,4 +15,5 @@ public interface UpsOrderTypeService {
 
 	UpsOrderTypeEntity queryOrderTypeById(Long orderTypeId);
 
+
 }

@@ -15,6 +15,7 @@ public interface MerchantOrderTypeDubboDao extends JpaRepository<MerchantOrderTy
 	@Transactional
 	@Query(value="DELETE FROM ups_t_merchant_order_type WHERE id=?1",nativeQuery=true)
 	void deleteMerchantById(Long id);
+   
     
 
 }
