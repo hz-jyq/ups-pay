@@ -17,9 +17,9 @@ import com.pgy.ups.pay.interfaces.service.config.dubbo.MerchantConfigService;
 import com.pgy.ups.pay.service.dao.MerchantConfigDubboDao;
 
 @Service
-public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
+public class MerchantConfigDubboServiceImpl implements MerchantConfigService {
 
-	private Logger logger = LoggerFactory.getLogger(MerchantConfigServiceDubboImpl.class);
+	private Logger logger = LoggerFactory.getLogger(MerchantConfigDubboServiceImpl.class);
 
 	@Resource
 	private MerchantConfigDubboDao merchantConfigDubboDao;
@@ -65,7 +65,7 @@ public class MerchantConfigServiceDubboImpl implements MerchantConfigService {
 	}
 
 	@Override
-	public MerchantConfigEntity createmerchantConfig(MerchantConfigForm form) {
+	public MerchantConfigEntity createMerchantConfig(MerchantConfigForm form) {
 
 		MerchantConfigEntity mce = merchantConfigDubboDao.queryByMerchantCode(form.getMerchantCode());
 		if (Objects.nonNull(mce)) {

@@ -8,4 +8,5 @@ import com.pgy.ups.pay.interfaces.entity.UpsOrderTypeEntity;
 @Repository
 public interface OrderTypeDubboDao extends JpaRepository<UpsOrderTypeEntity, Long>{
 
+
 }

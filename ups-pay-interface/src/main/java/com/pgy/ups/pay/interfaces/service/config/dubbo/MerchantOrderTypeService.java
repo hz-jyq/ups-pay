@@ -1,5 +1,7 @@
 package com.pgy.ups.pay.interfaces.service.config.dubbo;
 
+import com.pgy.ups.common.page.PageInfo;
+import com.pgy.ups.pay.interfaces.entity.MerchantOrderTypeEntity;
 import com.pgy.ups.pay.interfaces.form.MerchantOrderTypeForm;
 
 public interface MerchantOrderTypeService {
@@ -9,5 +11,7 @@ public interface MerchantOrderTypeService {
 	void deleteMerchantOrderType(Long id);
 
 	boolean updateMerchantOrderType(MerchantOrderTypeForm form);
+
+	PageInfo<MerchantOrderTypeEntity> queryMerchantOrderTypeForPage(MerchantOrderTypeForm form);
 
 }

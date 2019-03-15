@@ -2,6 +2,7 @@ package com.pgy.ups.pay.gateway.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+
 @ConfigurationProperties(prefix=DubboProperties.DUBBO_PREFIX)
 public class DubboProperties {
 	

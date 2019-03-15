@@ -10,7 +10,7 @@ import com.pgy.ups.pay.interfaces.service.order.dubbo.UpsOrderTypeService;
 import com.pgy.ups.pay.service.dao.OrderTypeDubboDao;
 
 @Service
-public class UpsOrderTypeServiceDubboImpl implements UpsOrderTypeService{
+public class UpsOrderTypeDubboServiceImpl implements UpsOrderTypeService{
 	
 	@Resource
 	private OrderTypeDubboDao orderTypeDubboDao;

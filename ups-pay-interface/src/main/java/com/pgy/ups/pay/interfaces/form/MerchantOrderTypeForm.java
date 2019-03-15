@@ -14,6 +14,10 @@ public class MerchantOrderTypeForm extends BaseForm{
     private  Long merchantId;
 
     private Long orderTypeId;
+    
+    private String defaultPayChannel; 
+    
+    private String routeStatus;
 
     private Date startTime;
 
@@ -41,6 +45,22 @@ public class MerchantOrderTypeForm extends BaseForm{
 
 	public void setOrderTypeId(Long orderTypeId) {
 		this.orderTypeId = orderTypeId;
+	}
+	
+	public String getDefaultPayChannel() {
+		return defaultPayChannel;
+	}
+
+	public void setDefaultPayChannel(String defaultPayChannel) {
+		this.defaultPayChannel = defaultPayChannel;
+	}
+
+	public String getRouteStatus() {
+		return routeStatus;
+	}
+
+	public void setRouteStatus(String routeStatus) {
+		this.routeStatus = routeStatus;
 	}
 
 	public Date getStartTime() {

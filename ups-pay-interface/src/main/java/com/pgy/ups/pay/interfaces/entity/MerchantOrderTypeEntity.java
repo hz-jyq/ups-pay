@@ -28,6 +28,12 @@ public  class MerchantOrderTypeEntity extends Model {
     @ManyToOne
     @JoinColumn(name="order_type_id")
     private UpsOrderTypeEntity upsOrderTypeEntity;
+    
+    @Column(name="default_pay_channel")
+    private String defaultPayChannel; 
+    
+    @Column(name="route_status",columnDefinition="char")
+    private String routeStatus;
 
 
     @Column(name = "start_time")
@@ -61,6 +67,22 @@ public  class MerchantOrderTypeEntity extends Model {
 
 	public void setUpsOrderTypeEntity(UpsOrderTypeEntity upsOrderTypeEntity) {
 		this.upsOrderTypeEntity = upsOrderTypeEntity;
+	}
+	
+	public String getDefaultPayChannel() {
+		return defaultPayChannel;
+	}
+
+	public void setDefaultPayChannel(String defaultPayChannel) {
+		this.defaultPayChannel = defaultPayChannel;
+	}
+
+	public String getRouteStatus() {
+		return routeStatus;
+	}
+
+	public void setRouteStatus(String routeStatus) {
+		this.routeStatus = routeStatus;
 	}
 
 	public Date getStartTime() {
