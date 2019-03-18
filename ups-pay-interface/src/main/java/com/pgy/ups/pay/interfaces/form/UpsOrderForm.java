@@ -12,10 +12,7 @@ public class UpsOrderForm  extends BaseForm{
 
     private String orderType;
 
-
-
     private String fromSystem;
-
 
     private String bankMd5;
 
@@ -26,7 +23,7 @@ public class UpsOrderForm  extends BaseForm{
     }
 
     public void setBankCard(String bankCard) {
-        if(StringUtils.isNotEmpty(bankCard)){
+        if(StringUtils.isNoneBlank(bankCard)){
             PgyDataHandlerService pgyDataHandlerService = new PgyDataHandlerServiceImpl();
             this.bankMd5 = pgyDataHandlerService.md5(bankCard);
         }

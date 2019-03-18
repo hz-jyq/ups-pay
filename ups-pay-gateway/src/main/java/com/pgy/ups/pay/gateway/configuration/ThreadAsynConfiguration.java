@@ -22,9 +22,9 @@ public class ThreadAsynConfiguration implements AsyncConfigurer {
 	public Executor getAsyncExecutor() {
 		ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor(); 
 		// 设置核心线程数
-		threadPool.setCorePoolSize(8);
+		threadPool.setCorePoolSize(4);
 		// 设置最大线程数
-		threadPool.setMaxPoolSize(16); 
+		threadPool.setMaxPoolSize(8); 
 		// 线程池所使用的缓冲队列
 		threadPool.setQueueCapacity(20000); 
 		// 等待任务在关机时完成--表明等待所有线程执行完
