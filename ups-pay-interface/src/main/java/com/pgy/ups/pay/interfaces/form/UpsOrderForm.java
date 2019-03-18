@@ -26,7 +26,7 @@ public class UpsOrderForm  extends BaseForm{
     }
 
     public void setBankCard(String bankCard) {
-        if(StringUtils.isNoneBlank(bankCard)){
+        if(StringUtils.isNotEmpty(bankCard)){
             PgyDataHandlerService pgyDataHandlerService = new PgyDataHandlerServiceImpl();
             this.bankMd5 = pgyDataHandlerService.md5(bankCard);
         }
