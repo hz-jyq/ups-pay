@@ -2,6 +2,7 @@ package com.pgy.ups.pay.interfaces.form;
 
 import com.pgy.data.handler.service.PgyDataHandlerService;
 import com.pgy.data.handler.service.impl.PgyDataHandlerServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 
 public class UpsOrderForm  extends BaseForm{
 
@@ -11,18 +12,24 @@ public class UpsOrderForm  extends BaseForm{
 
     private String orderType;
 
+
+
     private String fromSystem;
 
 
     private String bankMd5;
+
+    private  String businessFlowNum;
 
     public String getBankCard() {
         return bankCard;
     }
 
     public void setBankCard(String bankCard) {
-        PgyDataHandlerService pgyDataHandlerService = new PgyDataHandlerServiceImpl();
-        this.bankMd5 = pgyDataHandlerService.md5(bankCard);
+        if(StringUtils.isNoneBlank(bankCard)){
+            PgyDataHandlerService pgyDataHandlerService = new PgyDataHandlerServiceImpl();
+            this.bankMd5 = pgyDataHandlerService.md5(bankCard);
+        }
         this.bankCard = bankCard;
     }
 
@@ -50,5 +57,13 @@ public class UpsOrderForm  extends BaseForm{
         this.bankMd5 = bankMd5;
     }
 
+
+    public String getBusinessFlowNum() {
+        return businessFlowNum;
+    }
+
+    public void setBusinessFlowNum(String businessFlowNum) {
+        this.businessFlowNum = businessFlowNum;
+    }
 
 }
