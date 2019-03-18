@@ -14,8 +14,11 @@ public class UpsOrderForm  extends BaseForm{
 
 
 
-    private String fromSystem;
+    private Long id;
 
+    private  String payChannel;
+
+    private String fromSystem;
 
     private String bankMd5;
 
@@ -64,6 +67,22 @@ public class UpsOrderForm  extends BaseForm{
 
     public void setBusinessFlowNum(String businessFlowNum) {
         this.businessFlowNum = businessFlowNum;
+    }
+
+    public String getPayChannel() {
+        return payChannel;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPayChannel(String payChannel) {
+        this.payChannel = payChannel;
     }
 
 }
