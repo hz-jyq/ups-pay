@@ -12,7 +12,7 @@ public class UpsUserSignForm  extends  BaseForm{
     private  String bankCard;
 
 
-    private String orderType;
+    private String signType;
 
     private String fromSystem;
 
@@ -26,20 +26,19 @@ public class UpsUserSignForm  extends  BaseForm{
 
     private  String bankMd5;
 
+    public String getSignType() {
+        return signType;
+    }
 
-
+    public void setSignType(String signType) {
+        this.signType = signType;
+    }
 
     public String getBankCard() {
         return bankCard;
     }
 
-    public String getOrderType() {
-        return orderType;
-    }
 
-    public void setOrderType(String orderType) {
-        this.orderType = orderType;
-    }
 
     public String getFromSystem() {
         return fromSystem;
