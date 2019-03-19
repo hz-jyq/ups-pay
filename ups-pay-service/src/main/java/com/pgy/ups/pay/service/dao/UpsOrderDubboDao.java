@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UpsOrderDubboDao extends JpaRepository<UpsOrderEntity, Long> {
 
-    @Query(value = " select  * FROM ups_t_order c  WHERE c.from_system = :#{#form.fromSystem} AND IF (:#{#form.orderType} !='',c.order_type = :#{#form.orderType}  ,1=1) AND IF (:#{#form.bankMd5} !='',c.bank_md5 = :#{#form.bankMd5} ,1=1) ORDER BY c.create_time desc ",nativeQuery = true)
+    @Query(value = " SELECT  * FROM ups_t_order c  WHERE c.from_system = :#{#form.fromSystem} AND IF (:#{#form.orderType} !='',c.order_type = :#{#form.orderType}  ,1=1) AND IF (:#{#form.bankMd5} !='',c.bank_md5 = :#{#form.bankMd5} ,1=1) ORDER BY c.create_time DESC ",nativeQuery = true)
     Page<UpsOrderEntity> getPage(@Param("form") UpsOrderForm form, Pageable pageable);
 
 }
