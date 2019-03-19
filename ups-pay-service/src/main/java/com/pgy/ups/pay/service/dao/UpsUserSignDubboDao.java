@@ -2,6 +2,8 @@ package com.pgy.ups.pay.service.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +16,7 @@ import com.pgy.ups.pay.interfaces.form.UpsUserSignForm;
 public interface UpsUserSignDubboDao extends JpaRepository<UpsAuthSignEntity, Long> {
 
 
-    @Query(value = " select  * FROM ups_t_user_sign c  WHERE c.from_system = :#{#form.fromSystem} AND IF (:#{#form.orderType} !='',c.sign_type = :#{#form.signType}  ,1=1) AND IF (:#{#form.bankMd5} !='',c.bank_md5 = :#{#form.bankMd5} ,1=1) ORDER BY c.create_time desc",nativeQuery = true)
-    List<UpsAuthSignEntity> queryByForm(@Param("form") UpsUserSignForm form);
+    @Query(value = " select  * FROM ups_t_user_sign c  WHERE c.from_system = :#{#form.fromSystem} AND IF (:#{#form.signType} !='',c.sign_type = :#{#form.signType}  ,1=1) AND IF (:#{#form.bankMd5} !='',c.bank_md5 = :#{#form.bankMd5} ,1=1) ORDER BY c.create_time desc",nativeQuery = true)
+    Page<UpsAuthSignEntity> queryByForm(@Param("form") UpsUserSignForm form,Pageable pageable);
 
 }

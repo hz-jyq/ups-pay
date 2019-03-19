@@ -17,6 +17,6 @@ public class UpsUserSignDubboServiceImpl implements UpsUserSignService {
 
     @Override
     public PageInfo<UpsAuthSignEntity> queryByForm(UpsUserSignForm upsBankForm) {
-        return  new PageInfo<>(upsUserSignDubboDao.queryByForm(upsBankForm));
+        return  new PageInfo<>(upsUserSignDubboDao.queryByForm(upsBankForm,upsBankForm.getPageRequest()));
     }
 }
