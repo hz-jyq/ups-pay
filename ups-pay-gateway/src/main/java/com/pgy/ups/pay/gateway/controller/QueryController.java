@@ -16,9 +16,10 @@ import com.google.common.collect.Maps;
 import com.pgy.ups.common.exception.ParamValidException;
 import com.pgy.ups.pay.commom.constants.OrderStatus;
 import com.pgy.ups.pay.commom.constants.UpsResultCode;
+import com.pgy.ups.pay.commom.factory.impl.QueryServiceFactory;
 import com.pgy.ups.pay.commom.utils.SecurityUtils;
 import com.pgy.ups.pay.commom.utils.UpsResultModelUtil;
-import com.pgy.ups.pay.gateway.factory.QueryServiceFactory;
+
 import com.pgy.ups.pay.interfaces.entity.OrderPushEntity;
 import com.pgy.ups.pay.interfaces.entity.UpsAuthSignEntity;
 import com.pgy.ups.pay.interfaces.entity.UpsOrderEntity;
