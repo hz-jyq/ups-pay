@@ -16,8 +16,66 @@ public class UpsUserSignForm  extends  BaseForm{
 
     private String fromSystem;
 
+    private String userNo;
+
+
+    private String realName;
+
+    private String phoneNo;
+
+    private  String identity;
+
+
+    private  String realNameMd5;
+
+    private  String phoneNoMd5;
+
+    private  String identityMd5;
+
+    private  String businessFlowNum;
+
     public String getBankMd5() {
         return bankMd5;
+    }
+
+    public String getBusinessFlowNum() {
+        return businessFlowNum;
+    }
+
+    public void setBusinessFlowNum(String businessFlowNum) {
+        this.businessFlowNum = businessFlowNum;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
+    }
+
+    public void setRealName(String realName) {
+        this.realNameMd5 = getMd5(realName);
+        this.realName = realName;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+        this.phoneNoMd5 = getMd5(phoneNo);
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+        this.identityMd5 = getMd5(identity);
+
+    }
+
+    public void setRealNameMd5(String realNameMd5) {
+        this.realNameMd5 = realNameMd5;
+    }
+
+    public void setPhoneNoMd5(String phoneNoMd5) {
+        this.phoneNoMd5 = phoneNoMd5;
+    }
+
+    public void setIdentityMd5(String identityMd5) {
+        this.identityMd5 = identityMd5;
     }
 
     public void setBankMd5(String bankMd5) {
@@ -38,8 +96,6 @@ public class UpsUserSignForm  extends  BaseForm{
         return bankCard;
     }
 
-
-
     public String getFromSystem() {
         return fromSystem;
     }
@@ -49,13 +105,43 @@ public class UpsUserSignForm  extends  BaseForm{
     }
 
     public void setBankCard(String bankCard) {
-        if(StringUtils.isNoneBlank(bankCard)){
-            PgyDataHandlerService pgyDataHandlerService = new PgyDataHandlerServiceImpl();
-            this.bankMd5 = pgyDataHandlerService.md5(bankCard);
-        }
+        this.bankMd5 = getMd5(bankCard);
         this.bankCard = bankCard;
     }
 
+    public String getUserNo() {
+        return userNo;
+    }
 
+    public String getRealName() {
+        return realName;
+    }
 
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public String getRealNameMd5() {
+        return realNameMd5;
+    }
+
+    public String getPhoneNoMd5() {
+        return phoneNoMd5;
+    }
+
+    public String getIdentityMd5() {
+        return identityMd5;
+    }
+
+    private  String  getMd5(String str){
+        if(StringUtils.isNoneBlank(str)){
+            PgyDataHandlerService pgyDataHandlerService = new PgyDataHandlerServiceImpl();
+            return pgyDataHandlerService.md5(str);
+        }
+        return  null;
+    }
 }
