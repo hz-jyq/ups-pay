@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
+import com.alibaba.fescar.rm.datasource.DataSourceProxy;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import io.shardingsphere.api.config.ShardingRuleConfiguration;
 import io.shardingsphere.api.config.TableRuleConfiguration;
 import io.shardingsphere.api.config.strategy.StandardShardingStrategyConfiguration;
 import io.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class ShardingConfiguration{
@@ -37,9 +39,7 @@ public class ShardingConfiguration{
     
 	//不分库不要动这个字段
 	private String databaseName = "ups-pay";
-	
-	@Value("${druid.config.path}")
-	private String druidConfig;
+
 
 	@Bean(name="druidDataSource")
 	@ConfigurationProperties(prefix = "druid")
@@ -47,6 +47,10 @@ public class ShardingConfiguration{
 		return DruidDataSourceBuilder.create().build();
 	}
 
+	
+
+
+	@Primary
 	@Bean("dataSource")
 	public DataSource getShardingDataSource(@Qualifier("druidDataSource")DataSource dataSource) {
 
