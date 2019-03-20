@@ -8,10 +8,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -39,18 +42,14 @@ public class ShardingConfiguration{
 	@Value("${druid.config.path}")
 	private String druidConfig;
 
-	@Bean("dataSource")
-	public DataSource getShardingDataSource() {
+	@Bean(name="druidDataSource")
+	@ConfigurationProperties(prefix = "druid")
+	public DruidDataSource getDataSource(){
+		return DruidDataSourceBuilder.create().build();
+	}
 
-		Properties pro = new Properties();
-		try {
-			pro.load(new ClassPathResource(druidConfig).getInputStream());
-		} catch (Exception e) {
-			logger.error("druid.properties读取失败：{}", e);
-			throw new RuntimeException("druid.properties读取失败");
-		}
-		DruidDataSource dataSource = new DruidDataSource();
-		dataSource.configFromPropety(pro);
+	@Bean("dataSource")
+	public DataSource getShardingDataSource(@Qualifier("druidDataSource")DataSource dataSource) {
 
 		// 配置分片规则
 		ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
