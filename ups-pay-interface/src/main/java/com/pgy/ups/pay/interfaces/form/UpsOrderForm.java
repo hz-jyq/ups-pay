@@ -7,17 +7,22 @@ import org.apache.commons.lang3.StringUtils;
 public class UpsOrderForm  extends BaseForm{
 
     private static final long serialVersionUID = 8837735964328170783L;
+    
+    private Long id;
 
     private  String bankCard;
 
     private String orderType;
+    
+    private String upsOrderCode;
 
     private String fromSystem;
+    
+    private String orderStatus;
 
-    private Long id;
+    private String userNo;
 
     private  String payChannel;
-
 
     private String bankMd5;
 
@@ -83,5 +88,29 @@ public class UpsOrderForm  extends BaseForm{
     public void setPayChannel(String payChannel) {
         this.payChannel = payChannel;
     }
+
+	public String getUpsOrderCode() {
+		return upsOrderCode;
+	}
+
+	public void setUpsOrderCode(String upsOrderCode) {
+		this.upsOrderCode = upsOrderCode;
+	}
+
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
+	public String getUserNo() {
+		return userNo;
+	}
+
+	public void setUserNo(String userNo) {
+		this.userNo = userNo;
+	}  
 
 }

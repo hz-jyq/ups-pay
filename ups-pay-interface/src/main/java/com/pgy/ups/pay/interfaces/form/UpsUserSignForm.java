@@ -11,12 +11,15 @@ public class UpsUserSignForm  extends  BaseForm{
 
     private  String bankCard;
 
-
+    private Integer status;
+        
     private String signType;
 
     private String fromSystem;
 
     private String userNo;
+    
+    private String payChannel;
 
 
     private String realName;
@@ -24,7 +27,8 @@ public class UpsUserSignForm  extends  BaseForm{
     private String phoneNo;
 
     private  String identity;
-
+    
+    private  String tradeNo;
 
     private  String realNameMd5;
 
@@ -144,4 +148,29 @@ public class UpsUserSignForm  extends  BaseForm{
         }
         return  null;
     }
+
+	public String getTradeNo() {
+		return tradeNo;
+	}
+
+	public void setTradeNo(String tradeNo) {
+		this.tradeNo = tradeNo;
+	}
+
+	public String getPayChannel() {
+		return payChannel;
+	}
+
+	public void setPayChannel(String payChannel) {
+		this.payChannel = payChannel;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+  
 }
