@@ -1,11 +1,20 @@
 package com.pgy.ups.pay.interfaces.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pgy.ups.pay.interfaces.model.Model;
-
-
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.pgy.ups.pay.interfaces.model.Model;
 
 @Entity
 @Table(name="ups_t_merchant_order_type")
@@ -20,9 +29,8 @@ public  class MerchantOrderTypeEntity extends Model {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="merchant_id")
-    @JsonIgnore
     private  MerchantConfigEntity merchantConfigEntity;
 
     @ManyToOne

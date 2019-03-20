@@ -17,7 +17,5 @@ public interface PayCompanyService {
 	 */
 	List<PayCompanyEntity> queryAllAvailablePayChannels();
 
-	List<PayCompanyEntity> queryMerchantAvailableChannels(String fromSystem, String orderType);
-
 
 }

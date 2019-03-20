@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import javax.annotation.Resource;
@@ -11,6 +12,7 @@ import javax.annotation.Resource;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pgy.ups.common.utils.RedisUtils;
 import com.pgy.ups.pay.interfaces.cache.Cacheable;
 
@@ -39,7 +41,7 @@ public class CacheUtils {
 		for (Cacheable<? extends Serializable> c : list) {
 			String keyname = c.getCacheKeyname();
 			Map<String, ? extends Serializable> cache = c.getCacheableData();
-			redisUtils.hmset(keyname, cache);
+			setCacheByRediskeyname(keyname, cache);
 		}
 	}
 
@@ -49,8 +51,13 @@ public class CacheUtils {
 	 * @param keyName
 	 * @return
 	 */
-	public <T extends Serializable> Map<String, T> getCacheByRediskeyname(String rediskeyName, Class<T> clazz) {
-		return redisUtils.getMap(rediskeyName, clazz);
+	public <T> Map<String, T> getCacheByRediskeyname(String rediskeyName, Class<T> clazz) {
+		Map<String, String> jsonMap = redisUtils.getMap(rediskeyName, String.class);
+		Map<String, T> cache = new LinkedHashMap<>();
+		for (Entry<String, String> entry : jsonMap.entrySet()) {
+			cache.put(entry.getKey(), JSONObject.parseObject(entry.getValue(), clazz));
+		}
+		return cache;
 	}
 
 	/**
@@ -59,12 +66,12 @@ public class CacheUtils {
 	 * @param keyName
 	 * @return
 	 */
-	public <T extends Serializable> T getCacheByRediskeynameAndKey(String rediskeyName, String key, Class<T> clazz) {
-		Map<String, T> map = redisUtils.getMap(rediskeyName, clazz);
+	public <T> T getCacheByRediskeynameAndKey(String rediskeyName, String key, Class<T> clazz) {
+		Map<String, String> map = redisUtils.getMap(rediskeyName, String.class);
 		if (MapUtils.isEmpty(map)) {
 			return null;
 		}
-		return map.get(key);
+		return JSONObject.parseObject(map.get(key), clazz);
 	}
 
 	/**
@@ -74,11 +81,15 @@ public class CacheUtils {
 	 * @param cache
 	 * @return
 	 */
-	public boolean setCacheByRediskeyname(String rediskeyName, Map<String, ? extends Serializable> cache) {
-		if(Objects.isNull(cache)) {
+	public <T> boolean setCacheByRediskeyname(String rediskeyName, Map<String, T> cache) {
+		if (Objects.isNull(cache)) {
 			return false;
 		}
-		return redisUtils.hmset(rediskeyName, cache);
+		Map<String,String> map=new LinkedHashMap<>();
+		for(Entry<String,T> entry:cache.entrySet()) {
+			map.put(entry.getKey(), JSONObject.toJSONString(entry.getValue()));
+		}
+		return redisUtils.hmset(rediskeyName, map);
 	}
 
 	/**
@@ -88,21 +99,19 @@ public class CacheUtils {
 	 * @param cache
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public <T extends Serializable> boolean setCacheByRediskeynameAndKey(String rediskeyName, String key, T value) {
-        if(Objects.isNull(value)) {
-        	return false;
-        }
-		Map<String, ? extends Serializable> cache = redisUtils.getMap(rediskeyName, value.getClass());
-		if (MapUtils.isEmpty(cache)) {
-			Map<String, T> cacheMap = new LinkedHashMap<String, T>();
-			cacheMap.put(key, value);
-			return setCacheByRediskeyname(rediskeyName, cache);
+	public <T> boolean setCacheByRediskeynameAndKey(String rediskeyName, String key, T value) {
+		if (Objects.isNull(value)) {
+			return false;
 		}
-		((Map<String, T>) cache).put(key, value);
+		Map<String, String> cache = redisUtils.getMap(rediskeyName, String.class);
+		if (MapUtils.isEmpty(cache)) {
+			Map<String, String> cacheMap = new LinkedHashMap<>();
+			cacheMap.put(key, JSONObject.toJSONString(value));
+		} else {
+			cache.put(key, JSONObject.toJSONString(value));
+		}
 		return setCacheByRediskeyname(rediskeyName, cache);
 	}
-	
 
 	/**
 	 * 统一生成map的key

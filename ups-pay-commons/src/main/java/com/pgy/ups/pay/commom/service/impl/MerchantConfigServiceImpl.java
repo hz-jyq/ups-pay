@@ -1,7 +1,5 @@
 package com.pgy.ups.pay.commom.service.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +7,10 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.pgy.ups.common.exception.BussinessException;
@@ -59,18 +55,12 @@ public class MerchantConfigServiceImpl implements MerchantConfigService, Cacheab
 			logger.error("查询来源商私钥信息异常,fromSystem:{} ,merchantConfig:{}", fromSystem, merchantConfigEntity);
 			throw new BussinessException("查询来源商私钥信息异常！");
 		}
-		//秘钥文件在classpath下的路径
-		String private_key_path = AES_KEY_PATH + fromSystem + File.separator
-				+ merchantConfigEntity.getUpsPrivateKey();
-		ClassPathResource classPathResource = new ClassPathResource(private_key_path);
-		try {
-			return IOUtils.toString(classPathResource.getInputStream(), "UTF-8");
-		} catch (IOException e) {
-			logger.error("系统来源：{}", fromSystem);
-			logger.error("私钥路径：{}", private_key_path);
-			logger.error("读取商户私钥信息异常：{}", e);
+		String privateKey = merchantConfigEntity.getUpsPrivateKey();
+		if(StringUtils.isBlank(privateKey)) {
+			throw new BussinessException("读取商户私钥信息异常！");
 		}
-		throw new BussinessException("读取商户私钥信息异常！");
+		return privateKey;
+		
 	}
 
 	/**
@@ -83,22 +73,16 @@ public class MerchantConfigServiceImpl implements MerchantConfigService, Cacheab
 			logger.error("查询来源商公钥信息异常,fromSystem:{} ,merchantConfig:{}", fromSystem, merchantConfigEntity);
 			throw new BussinessException("查询来源商公钥信息异常！");
 		}
-		String public_key_path = AES_KEY_PATH + fromSystem + File.separator
-				+ merchantConfigEntity.getMerchantPublicKey();
-		ClassPathResource classPathResource = new ClassPathResource(public_key_path);
-		try {
-			return IOUtils.toString(classPathResource.getInputStream(), "UTF-8");
-		} catch (IOException e) {
-			logger.error("系统来源：{}", fromSystem);
-			logger.error("公钥路径：{}", public_key_path);
-			logger.error("读取商户公钥信息异常：{}", e);
+		String publicKey = merchantConfigEntity.getMerchantPublicKey();
+		if(StringUtils.isBlank(publicKey)) {
+			throw new BussinessException("读取商户公钥信息异常！");
 		}
-		throw new BussinessException("读取商户公钥信息异常！");
+		return publicKey;
+		
 	}
 
 	@Override
 	public List<MerchantConfigEntity> queryAvaliableMerchantList() {
-
 		return merchantConfigDao.querByAvaliableMerchantList(true);
 	}
 

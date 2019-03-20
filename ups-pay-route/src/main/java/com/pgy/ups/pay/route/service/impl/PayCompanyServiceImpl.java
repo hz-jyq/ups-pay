@@ -2,22 +2,18 @@ package com.pgy.ups.pay.route.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.pgy.ups.pay.commom.utils.CacheUtils;
 import com.pgy.ups.pay.interfaces.cache.Cacheable;
 import com.pgy.ups.pay.interfaces.entity.PayCompanyEntity;
-import com.pgy.ups.pay.interfaces.entity.RouteMerchantChannelEntity;
 import com.pgy.ups.pay.interfaces.service.route.PayCompanyService;
-import com.pgy.ups.pay.interfaces.service.route.RouteMerchantChannelService;
 import com.pgy.ups.pay.route.dao.PayCompanyDao;
 
 @Service
@@ -28,8 +24,6 @@ public class PayCompanyServiceImpl implements PayCompanyService, Cacheable<PayCo
 	@Resource
 	private PayCompanyDao payCompanyDao;
 
-	@Resource
-	private RouteMerchantChannelService routeMerchantChannelService;
 
 	@Resource
 	private CacheUtils cacheUtils;
@@ -49,38 +43,6 @@ public class PayCompanyServiceImpl implements PayCompanyService, Cacheable<PayCo
 		return list;
 	}
     
-	/**
-	 * 未配置的支付渠道要剔除
-	 */
-	@Override
-	public List<PayCompanyEntity> queryMerchantAvailableChannels(String fromSystem, String orderType) {
-		//商户配置的可支付渠道
-		List<RouteMerchantChannelEntity> rmces = routeMerchantChannelService.queryMerchantAvailableChannels(fromSystem,
-				orderType);
-		//UPS所有的支付渠道
-		List<PayCompanyEntity> list = queryAllAvailablePayChannels();
-		Iterator<PayCompanyEntity> it=list.iterator();
-		while(it.hasNext()) {
-			PayCompanyEntity pce=it.next();
-			if(!contains(rmces,pce.getCompanyCode())) {
-				it.remove();
-			}
-		}
-		return list;
-	}
-
-	private boolean contains(List<RouteMerchantChannelEntity> list, String companyCode) {
-		if(CollectionUtils.isEmpty(list)) {
-			return false;
-		}
-		for(RouteMerchantChannelEntity rmce:list) {
-			if(StringUtils.equalsIgnoreCase(rmce.getPayChannel(), companyCode)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public String getCacheKeyname() {
 
