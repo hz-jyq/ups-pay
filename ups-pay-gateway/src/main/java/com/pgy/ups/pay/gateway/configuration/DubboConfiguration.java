@@ -12,7 +12,7 @@ import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
 
 @Configuration
 @EnableConfigurationProperties(DubboProperties.class)
-@DubboComponentScan("com.pgy.ups.pay.service.**")
+@DubboComponentScan(basePackages= {"com.pgy.ups.pay.service.**"})
 public class DubboConfiguration {
 
 	@Bean
