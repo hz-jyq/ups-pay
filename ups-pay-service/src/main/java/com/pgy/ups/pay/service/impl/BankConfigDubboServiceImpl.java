@@ -4,6 +4,9 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
+import com.alibaba.fescar.core.context.RootContext;
+import com.alibaba.fescar.spring.annotation.GlobalTransactionScanner;
+import com.alibaba.fescar.spring.annotation.GlobalTransactional;
 import org.springframework.data.domain.Page;
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -32,10 +35,12 @@ public class BankConfigDubboServiceImpl implements BankConfigService {
 		return new PageInfo<>(page);
 	}
 
+
 	@Override
 	public void deleteBankConfigById(Long id) {
 		bankConfigDubboDao.deleteById(id);
 	}
+
 
 	@Override
 	public UpsBankEntity saveBankConfig(UpsBankForm form) {

@@ -5,6 +5,7 @@ import java.util.Objects;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.Reference;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
@@ -108,5 +109,12 @@ public class SchedulerController {
 		scheduler.scheduleJob(jobDetail, trigger);
 		return "success";
 	}
+
+	@ResponseBody
+	@GetMapping("/test")
+	public void test(){
+
+	}
+
 
 }

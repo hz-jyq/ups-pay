@@ -14,6 +14,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<skipTests>true</skipTests>
+		<fescar.version>0.3.1</fescar.version>
+
 	</properties>
 
 	<modules>
@@ -47,6 +49,7 @@
 				<artifactId>spring-context-support</artifactId>
 				<version>5.0.9.RELEASE</version>
 			</dependency>
+
 
 			<!-- alibaba的druid数据库连接池 -->
 			<dependency>
@@ -327,6 +330,13 @@
 				<groupId>com.pgy</groupId>
 				<artifactId>data-handler-service</artifactId>
 				<version>1.1</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>com.alibaba.fescar</groupId>
+				<artifactId>fescar-all</artifactId>
+				<version>${fescar.version}</version>
 			</dependency>
 
 		</dependencies>

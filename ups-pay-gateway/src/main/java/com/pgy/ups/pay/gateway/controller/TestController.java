@@ -8,8 +8,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import com.pgy.ups.common.page.PageInfo;
+import com.pgy.ups.pay.interfaces.entity.UpsAuthSignEntity;
 import com.pgy.ups.pay.interfaces.entity.UpsOrderEntity;
 import com.pgy.ups.pay.interfaces.form.UpsOrderForm;
+import com.pgy.ups.pay.interfaces.form.UpsUserSignForm;
+import com.pgy.ups.pay.interfaces.service.auth.dubbo.UpsUserSignService;
 import com.pgy.ups.pay.interfaces.service.order.dubbo.UpsOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +49,10 @@ public class TestController {
 
 	@Resource
 	private UpsOrderService upsOrderService;
+
+	@Resource
+	private UpsUserSignService  upsUserSignService;
+
 
 
 	/**
@@ -158,6 +165,12 @@ public class TestController {
 	@RequestMapping("/testReturn1.do")
 	public PageInfo<UpsOrderEntity> testCallback1(UpsOrderForm form){
 	  return  	upsOrderService.queryByForm(form);
+	}
+
+	@ResponseBody
+	@RequestMapping("/testReturn2.do")
+	public PageInfo<UpsAuthSignEntity> testCallback2(UpsUserSignForm form){
+		return  	upsUserSignService.queryByForm(form);
 	}
 
 }

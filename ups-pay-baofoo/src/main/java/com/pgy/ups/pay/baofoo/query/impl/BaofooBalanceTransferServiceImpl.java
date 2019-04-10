@@ -13,6 +13,7 @@ import java.util.Random;
 
 import javax.annotation.Resource;
 
+import com.alibaba.fescar.core.context.RootContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ import com.pgy.ups.pay.interfaces.service.balance.UpsBalanceTransferRecordServic
 import com.pgy.ups.pay.interfaces.service.balance.UpsBalanceTransferService;
 import com.pgy.ups.pay.interfaces.service.config.UpsTppMerConfigService;
 
-@Service(group="baofooBalanceTransferServiceImpl",timeout=60000,retries=0)
+@Service
 public class BaofooBalanceTransferServiceImpl implements UpsBalanceTransferService {
 
 
@@ -55,7 +56,9 @@ public class BaofooBalanceTransferServiceImpl implements UpsBalanceTransferServi
     private UpsTppMerConfigService upsTppMerConfigService;
 
 
+
     public void balanceTransfer(UpsBalanceTransferConfigEntity dto ) {
+        System.out.println("全局事务id ：" + RootContext.getXID());
         UpsBalanceEntity rdBalance = upsBalanceService.getBalanceByMemberId(dto.getPayMemberId());
         logger.info("转账{}",dto.getPayMemberId());
         if(rdBalance != null){
@@ -194,6 +197,7 @@ public class BaofooBalanceTransferServiceImpl implements UpsBalanceTransferServi
 
     @Override
     public void balanceTransferQuartz() {
+        System.out.println("全局事务id ：" + RootContext.getXID());
         List<UpsBalanceTransferConfigEntity>  balanceTransferList =  upsBalanceTransferConfigService.getList();
         for(UpsBalanceTransferConfigEntity entity :balanceTransferList){
             balanceTransfer(entity );

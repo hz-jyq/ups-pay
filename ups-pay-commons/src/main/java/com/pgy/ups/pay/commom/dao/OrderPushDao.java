@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.pgy.ups.pay.interfaces.entity.OrderPushEntity;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface OrderPushDao extends JpaRepository<OrderPushEntity, Long>{
     
 	//如果requery字段为真，需要强行查询一次无视订单状态和订单时间

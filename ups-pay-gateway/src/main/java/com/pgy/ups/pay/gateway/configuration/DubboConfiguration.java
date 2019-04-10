@@ -40,6 +40,7 @@ public class DubboConfiguration {
 		RegistryConfig registryConfig = new RegistryConfig();
 		registryConfig.setAddress(dubboProperties.getAddress());
 		registryConfig.setClient(dubboProperties.getZkClient());
+		registryConfig.setPort(-1);
 		return registryConfig;
 	}
 
