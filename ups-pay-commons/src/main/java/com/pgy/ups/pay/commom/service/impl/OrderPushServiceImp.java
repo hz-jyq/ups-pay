@@ -1,6 +1,5 @@
 package com.pgy.ups.pay.commom.service.impl;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -131,7 +130,7 @@ public class OrderPushServiceImp implements OrderPushService {
 			try {
 				String resultStr = OkHttpUtil.postForm(ope.getNotifyUrl(), ReflectUtils.objectToMap(orderPushModel));
 				flag = parseResult(resultStr);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				logger.error("订单推送业务端掉调用HttpClient异常：{},推送内容：{}", e, orderPushModel);
 				// 获取当前环境 非生产环境直接设为推送成功
 				flag = false;
