@@ -15,7 +15,7 @@ import com.pgy.ups.pay.interfaces.common.Signable;
 
 public class UpsOrderModel extends Model implements Signable {
 
-	private static final String[] SIGN_RULE = new String[] { "id", "upsOrderCode", "fromSystem", "orderType",
+	private static final String[] SIGN_RULE = new String[] { "id", "upsOrderCode", "productId", "orderType",
 			"businessType","businessFlowNum", "userNo", "realName", "identity", "phoneNo", "bankCode", "bankCard", "amount", "payChannel",
 			"orderStatus" };
 
@@ -28,7 +28,7 @@ public class UpsOrderModel extends Model implements Signable {
 
 	private String upsOrderCode;
 
-	private String fromSystem;
+	private Long productId;
 
 	private String orderType;
 
@@ -76,12 +76,12 @@ public class UpsOrderModel extends Model implements Signable {
 		this.id = id;
 	}
 
-	public String getFromSystem() {
-		return fromSystem;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setFromSystem(String fromSystem) {
-		this.fromSystem = fromSystem;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public String getOrderType() {

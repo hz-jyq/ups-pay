@@ -50,7 +50,7 @@ public class UpsSmsChannelEntity extends Model {
 
 
     @Column(name = "from_system",columnDefinition="BIT")
-    private Boolean fromSystem;
+    private Boolean productId;
 
     @Column(name="update_time")
     @Temporal(TemporalType.TIMESTAMP)
@@ -151,12 +151,12 @@ public class UpsSmsChannelEntity extends Model {
         isUserd = userd;
     }
 
-    public Boolean getFromSystem() {
-        return fromSystem;
+    public Boolean getProductId() {
+        return productId;
     }
 
-    public void setFromSystem(Boolean fromSystem) {
-        this.fromSystem = fromSystem;
+    public void setProductId(Boolean productId) {
+        this.productId = productId;
     }
 
 

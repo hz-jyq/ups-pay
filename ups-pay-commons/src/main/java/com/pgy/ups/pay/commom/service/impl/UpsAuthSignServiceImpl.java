@@ -11,7 +11,7 @@ import com.pgy.ups.pay.commom.dao.UpsAuthSignDao;
 import com.pgy.ups.pay.interfaces.entity.UpsAuthSignEntity;
 import com.pgy.ups.pay.interfaces.enums.SignTypeEnum;
 import com.pgy.ups.pay.interfaces.model.UpsUnBindCardModel;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignService;
 
 import java.util.Date;
 import java.util.Optional;
@@ -37,15 +37,15 @@ public class UpsAuthSignServiceImpl implements UpsAuthSignService {
     public UpsAuthSignEntity saveRecord(UpsAuthSignEntity upsAuthSignBaofooEntity) {
         upsAuthSignBaofooEntity.setCreateTime(new Date());
         upsAuthSignBaofooEntity.setUpdateTime(new Date());
-        return upsAuthSignBaofooDao.saveAndFlush(upsAuthSignBaofooEntity);
+        return upsAuthSignBaofooDao.save(upsAuthSignBaofooEntity);
     }
 
     @Override
     @PrintExecuteTime
-    public UpsAuthSignEntity queryProtocolSignBaofoo(String fromSystem, String payChannel, String userNo, String cardNo) {
+    public UpsAuthSignEntity queryProtocolSign(Long productId, String payChannel, String userNo, String cardNo) {
         UpsAuthSignEntity upsAuthSignBaofooEntity = new UpsAuthSignEntity();
         PgyDataHandlerService payDate =  new  PgyDataHandlerServiceImpl();
-        upsAuthSignBaofooEntity.setFromSystem(fromSystem);
+        upsAuthSignBaofooEntity.setProductId(productId);
         upsAuthSignBaofooEntity.setPayChannel(payChannel);
         upsAuthSignBaofooEntity.setUserNo(userNo);
         upsAuthSignBaofooEntity.setBankMd5(payDate.md5(cardNo));
@@ -64,7 +64,7 @@ public class UpsAuthSignServiceImpl implements UpsAuthSignService {
     @Override
     public void unbindCard(UpsUnBindCardModel upsUnBindCardModel) {
         PgyDataHandlerService payDate =  new  PgyDataHandlerServiceImpl();
-        upsAuthSignBaofooDao.unbindCard(upsUnBindCardModel.getFromSystem(),upsUnBindCardModel.getUserNo(),payDate.md5(upsUnBindCardModel.getBankCard()),payDate.md5(upsUnBindCardModel.getPhoneNo()),payDate.md5(upsUnBindCardModel.getIdentity()),payDate.md5(upsUnBindCardModel.getRealName()));
+        upsAuthSignBaofooDao.unbindCard(upsUnBindCardModel.getProductId(),upsUnBindCardModel.getUserNo(),payDate.md5(upsUnBindCardModel.getBankCard()),payDate.md5(upsUnBindCardModel.getPhoneNo()),payDate.md5(upsUnBindCardModel.getIdentity()),payDate.md5(upsUnBindCardModel.getRealName()));
     }
 
 }

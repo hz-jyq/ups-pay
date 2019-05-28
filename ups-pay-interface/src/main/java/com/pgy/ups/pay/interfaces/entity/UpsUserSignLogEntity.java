@@ -24,8 +24,8 @@ public class UpsUserSignLogEntity extends  EncryptSignModel{
 	@Id
     private Long id;
 
-    @Column(name="from_system")
-    private String formSystem;
+    @Column(name="product_id")
+    private Long productId;
 
     @Column(name="pay_channel")
     private String payChannel;
@@ -87,12 +87,12 @@ public class UpsUserSignLogEntity extends  EncryptSignModel{
 
 
 
-    public String getFormSystem() {
-        return formSystem;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setFormSystem(String formSystem) {
-        this.formSystem = formSystem;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public String getPayChannel() {

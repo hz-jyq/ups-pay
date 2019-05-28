@@ -15,10 +15,10 @@ public interface UpsThirdpartyConfigService {
 	 * 查询UPS第三方支付渠道配置
 	 * @param payChannel
 	 * @param orderType
-	 * @param fromSystem
+	 * @param productId
 	 * @return
 	 */
-	UpsThirdpartyConfigEntity queryThirdpartyConfig(String payChannel,String orderType,String fromSystem);
+	UpsThirdpartyConfigEntity queryThirdpartyConfig(String payChannel,String orderType,Long productId);
 
 
 }

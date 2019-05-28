@@ -1,22 +1,10 @@
 package com.pgy.ups.pay.gateway.controller;
 
-import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.google.common.util.concurrent.RateLimiter;
 import com.pgy.ups.common.annotation.PrintExecuteTime;
+import com.pgy.ups.common.exception.BussinessException;
 import com.pgy.ups.common.exception.ParamValidException;
 import com.pgy.ups.common.utils.SpringUtils;
 import com.pgy.ups.pay.commom.constants.OrderType;
@@ -24,30 +12,36 @@ import com.pgy.ups.pay.commom.constants.RequestAttributeName;
 import com.pgy.ups.pay.commom.utils.SecurityUtils;
 import com.pgy.ups.pay.commom.utils.UpsResultModelUtil;
 import com.pgy.ups.pay.commom.utils.ValidateUtils;
-import com.pgy.ups.pay.gateway.factory.BussinessHandlerFactory;
-import com.pgy.ups.pay.interfaces.entity.CollectChooseEntity;
-import com.pgy.ups.pay.interfaces.entity.UpsAuthSignEntity;
-import com.pgy.ups.pay.interfaces.entity.UpsLogEntity;
-import com.pgy.ups.pay.interfaces.entity.UpsOrderEntity;
-import com.pgy.ups.pay.interfaces.entity.UpsSignDefaultConfigEntity;
-import com.pgy.ups.pay.interfaces.entity.UpsThirdpartyConfigEntity;
+import com.pgy.ups.pay.gateway.factory.HandlerFactory;
+import com.pgy.ups.pay.interfaces.entity.*;
 import com.pgy.ups.pay.interfaces.enums.SignTypeEnum;
 import com.pgy.ups.pay.interfaces.enums.UpsResultEnum;
-import com.pgy.ups.pay.interfaces.model.UpsBindCardParamModel;
-import com.pgy.ups.pay.interfaces.model.UpsCollectParamModel;
-import com.pgy.ups.pay.interfaces.model.UpsParamModel;
-import com.pgy.ups.pay.interfaces.model.UpsPayParamModel;
-import com.pgy.ups.pay.interfaces.model.UpsResultModel;
-import com.pgy.ups.pay.interfaces.model.UpsSignatureParamModel;
-import com.pgy.ups.pay.interfaces.model.UpsUnBindCardModel;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignService;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsSignDefaultConfigervice;
+import com.pgy.ups.pay.interfaces.model.*;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsSignDefaultConfigervice;
 import com.pgy.ups.pay.interfaces.service.config.CollectChooseService;
 import com.pgy.ups.pay.interfaces.service.config.MerchantConfigService;
+import com.pgy.ups.pay.interfaces.service.config.MerchantOrderTypeService;
 import com.pgy.ups.pay.interfaces.service.config.UpsThirdpartyConfigService;
 import com.pgy.ups.pay.interfaces.service.log.UpsLogService;
 import com.pgy.ups.pay.interfaces.service.order.UpsOrderService;
+import com.pgy.ups.pay.interfaces.service.product.UpsProductService;
+import com.pgy.ups.pay.interfaces.service.route.PayCompanyService;
 import com.pgy.ups.pay.interfaces.service.route.RouteService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 支付网关
@@ -58,7 +52,7 @@ import com.pgy.ups.pay.interfaces.service.route.RouteService;
 
 @Controller
 @RequestMapping("/index")
-public class IndexController {
+public class IndexController{
 
 	private Logger logger = LoggerFactory.getLogger(IndexController.class);
 
@@ -89,11 +83,21 @@ public class IndexController {
 	@Resource
 	private UpsAuthSignService upsAuthSignBaofooService;
 
+
 	@Resource
-	private BussinessHandlerFactory<Object> bussinessHandlerFactory;
+	private UpsProductService  upsProductService;
+
+	@Resource
+	 private HandlerFactory handlerFactory;
 
 	@Resource
 	private UpsAuthSignService upsAuthSignService;
+
+	@Resource
+	private MerchantOrderTypeService merchantOrderTypeService;
+	
+	@Resource
+	private PayCompanyService PayCompanyService;
 
 	/**
 	 * 代付接口
@@ -109,8 +113,12 @@ public class IndexController {
 		logger.info("接收借款参数：{}", upsPayParamModel);
 		// 验证并保存参数，记录日志
 		recordAndVerifyParam(upsPayParamModel);
+		// 验证该商户是否开通了代付功能
+		MerchantOrderTypeEntity mote = merchantOrderTypeService
+				.confirmMerchantOrderType(upsPayParamModel.getProductId(), OrderType.PAY);
 		upsPayParamModel.setOrderType(OrderType.PAY);
-		return disposePayOrCollect(upsPayParamModel);
+
+		return disposePayOrCollect(upsPayParamModel, mote);
 	}
 
 	/**
@@ -125,10 +133,14 @@ public class IndexController {
 	public UpsResultModel upsCollect(UpsCollectParamModel upsCollectParamModel) throws ParamValidException {
 		logger.info("接收还款参数：{}", upsCollectParamModel);
 		recordAndVerifyParam(upsCollectParamModel);
-		CollectChooseEntity cce = collectChooseService.queryCollectType(upsCollectParamModel.getFromSystem());
+		// 判断走普通代扣或者协议代扣
+		CollectChooseEntity cce = collectChooseService.queryCollectType(upsCollectParamModel.getProductId());
 		upsCollectParamModel.setOrderType(Objects.isNull(cce) ? OrderType.COLLECT
 				: StringUtils.isBlank(cce.getCollectType()) ? OrderType.COLLECT : cce.getCollectType());
-		return disposePayOrCollect(upsCollectParamModel);
+		// 验证该商户是否开通了代扣或协议代扣功能
+		MerchantOrderTypeEntity mote = merchantOrderTypeService
+				.confirmMerchantOrderType(upsCollectParamModel.getProductId(), upsCollectParamModel.getOrderType());
+		return disposePayOrCollect(upsCollectParamModel, mote);
 	}
 
 	/**
@@ -143,13 +155,15 @@ public class IndexController {
 	public UpsResultModel upsSignature(UpsSignatureParamModel upsSignatureParamModel) throws ParamValidException {
 		logger.info("认证签约参数：{}", upsSignatureParamModel);
 		recordAndVerifyParam(upsSignatureParamModel);
+		// 验证该商户是否开通了签约该功能
+		MerchantOrderTypeEntity mote = merchantOrderTypeService
+				.confirmMerchantOrderType(upsSignatureParamModel.getProductId(), OrderType.SIGNATRUE);
 		upsSignatureParamModel.setOrderType(OrderType.SIGNATRUE);
 		// 返回并设置路由
-		String payChannel = routeService.obtainAvalibaleRoute(upsSignatureParamModel);
+		String payChannel = getPayChannel(upsSignatureParamModel, mote);
 		upsSignatureParamModel.setPayChannel(payChannel);
 		// 处理并返回结果
-		UpsResultModel upsResultModel = bussinessHandlerFactory.getInstance(upsSignatureParamModel)
-				.handler(upsSignatureParamModel);
+		UpsResultModel upsResultModel = handlerFactory.signature(upsSignatureParamModel);
 		return recordAndReturnResult(upsResultModel);
 	}
 
@@ -165,13 +179,15 @@ public class IndexController {
 	public UpsResultModel upsBindCard(UpsBindCardParamModel upsBindCardParamModel) throws ParamValidException {
 		logger.info("认证绑卡参数：{}", upsBindCardParamModel);
 		recordAndVerifyParam(upsBindCardParamModel);
+		// 验证该商户是否开通了绑卡该功能
+		MerchantOrderTypeEntity mote = merchantOrderTypeService
+				.confirmMerchantOrderType(upsBindCardParamModel.getProductId(), OrderType.BINDCARD);
 		upsBindCardParamModel.setOrderType(OrderType.BINDCARD);
 		// 返回并设置路由
-		String payChannel = routeService.obtainAvalibaleRoute(upsBindCardParamModel);
+		String payChannel = getPayChannel(upsBindCardParamModel, mote);
 		upsBindCardParamModel.setPayChannel(payChannel);
 		// 处理并返回结果
-		UpsResultModel upsResultModel = bussinessHandlerFactory.getInstance(upsBindCardParamModel)
-				.handler(upsBindCardParamModel);
+		UpsResultModel upsResultModel = handlerFactory.bindCard(upsBindCardParamModel);
 		return recordAndReturnResult(upsResultModel);
 	}
 
@@ -185,16 +201,19 @@ public class IndexController {
 	@ResponseBody
 	@PrintExecuteTime
 	@RequestMapping("/protocol/signature.do")
-	public UpsResultModel protocolSignature(UpsSignatureParamModel upsBindCardParamModel) throws ParamValidException {
-		logger.info("协议签约参数：{}", upsBindCardParamModel);
-		recordAndVerifyParam(upsBindCardParamModel);
-		upsBindCardParamModel.setOrderType(OrderType.PROTOCOL_SIGNATRUE);
+	public UpsResultModel protocolSignature(UpsSignatureParamModel upsSignatureParamModel) throws ParamValidException {
+		logger.info("协议签约参数：{}", upsSignatureParamModel);
+		recordAndVerifyParam(upsSignatureParamModel);
+		// 验证该商户是否开通了协议签约该功能
+		MerchantOrderTypeEntity mote = merchantOrderTypeService
+				.confirmMerchantOrderType(upsSignatureParamModel.getProductId(), OrderType.PROTOCOL_SIGNATRUE);
+		upsSignatureParamModel.setOrderType(OrderType.PROTOCOL_SIGNATRUE);
+
 		// 返回并设置路由
-		String payChannel = routeService.obtainAvalibaleRoute(upsBindCardParamModel);
-		upsBindCardParamModel.setPayChannel(payChannel);
+		String payChannel = getPayChannel(upsSignatureParamModel, mote);
+		upsSignatureParamModel.setPayChannel(payChannel);
 		// 处理并返回结果
-		UpsResultModel upsResultModel = bussinessHandlerFactory.getInstance(upsBindCardParamModel)
-				.handler(upsBindCardParamModel);
+		UpsResultModel upsResultModel = handlerFactory.signature(upsSignatureParamModel);
 		return recordAndReturnResult(upsResultModel);
 	}
 
@@ -211,14 +230,16 @@ public class IndexController {
 	public UpsResultModel protocolBindCard(UpsBindCardParamModel upsBindCardParamModel) throws ParamValidException {
 		logger.info("协议绑卡参数：{}", upsBindCardParamModel);
 		recordAndVerifyParam(upsBindCardParamModel);
+		// 验证该商户是否开通了协议签约该功能
+		MerchantOrderTypeEntity mote = merchantOrderTypeService
+				.confirmMerchantOrderType(upsBindCardParamModel.getProductId(), OrderType.PROTOCOL_BINDCARD);
 		upsBindCardParamModel.setOrderType(OrderType.PROTOCOL_BINDCARD);
-
 		// 返回并设置路由
-		String payChannel = routeService.obtainAvalibaleRoute(upsBindCardParamModel);
+		String payChannel = getPayChannel(upsBindCardParamModel, mote);
 		upsBindCardParamModel.setPayChannel(payChannel);
+
 		// 处理并返回结果
-		UpsResultModel upsResultModel = bussinessHandlerFactory.getInstance(upsBindCardParamModel)
-				.handler(upsBindCardParamModel);
+		UpsResultModel upsResultModel = handlerFactory.bindCard(upsBindCardParamModel);
 
 		return recordAndReturnResult(upsResultModel);
 	}
@@ -235,16 +256,17 @@ public class IndexController {
 	@RequestMapping("/signature.do")
 	public UpsResultModel signature(UpsSignatureParamModel upsBindCardParamModel) throws ParamValidException {
 		logger.info("统一签约入参：{}", upsBindCardParamModel);
-		recordAndVerifyParam(upsBindCardParamModel);
 		UpsSignDefaultConfigEntity entity = upsSignDefaultConfigervice
-				.queryUpsSignDefaultConfig(upsBindCardParamModel.getFromSystem());
+				.queryUpsSignDefaultConfig(upsBindCardParamModel.getProductId());
 		String signType = entity == null ? SignTypeEnum.PROTOCOL.getCode() : entity.getSignType();
-		upsBindCardParamModel.setOrderType(OrderType.SignatureMap.get(signType));
+        String orderType = OrderType.SignatureMap.get(signType);
+		MerchantOrderTypeEntity mote = merchantOrderTypeService
+						.confirmMerchantOrderType(upsBindCardParamModel.getProductId(),orderType);
+		upsBindCardParamModel.setOrderType(orderType);
 		// 返回并设置路由
-		String payChannel = routeService.obtainAvalibaleRoute(upsBindCardParamModel);
+		String payChannel = getPayChannel(upsBindCardParamModel, mote);
 		upsBindCardParamModel.setPayChannel(payChannel);
-		UpsResultModel upsResultModel = bussinessHandlerFactory.getInstance(upsBindCardParamModel)
-				.handler(upsBindCardParamModel);
+		UpsResultModel upsResultModel = handlerFactory.signature(upsBindCardParamModel);
 		return recordAndReturnResult(upsResultModel);
 	}
 
@@ -262,15 +284,17 @@ public class IndexController {
 		logger.info("统一绑卡参数：{}", upsBindCardParamModel);
 		recordAndVerifyParam(upsBindCardParamModel);
 		UpsSignDefaultConfigEntity entity = upsSignDefaultConfigervice
-				.queryUpsSignDefaultConfig(upsBindCardParamModel.getFromSystem());
+				.queryUpsSignDefaultConfig(upsBindCardParamModel.getProductId());
 		String signType = entity == null ? SignTypeEnum.PROTOCOL.getCode() : entity.getSignType();
+		MerchantOrderTypeEntity mote = merchantOrderTypeService
+				.confirmMerchantOrderType(upsBindCardParamModel.getProductId(),OrderType.BindCardMap.get(signType));
+
 		upsBindCardParamModel.setOrderType(OrderType.BindCardMap.get(signType));
 		// 返回并设置路由
-		String payChannel = routeService.obtainAvalibaleRoute(upsBindCardParamModel);
+		String payChannel = getPayChannel(upsBindCardParamModel, mote);
 		upsBindCardParamModel.setPayChannel(payChannel);
 		// 处理并返回结果
-		UpsResultModel upsResultModel = bussinessHandlerFactory.getInstance(upsBindCardParamModel)
-				.handler(upsBindCardParamModel);
+		UpsResultModel upsResultModel = handlerFactory.bindCard(upsBindCardParamModel);
 		return recordAndReturnResult(upsResultModel);
 	}
 
@@ -290,38 +314,61 @@ public class IndexController {
 	 * @return
 	 */
 
-	private UpsResultModel disposePayOrCollect(UpsParamModel upm) {
-		// 返回并设置路由
-		String payChannel = routeService.obtainAvalibaleRoute(upm);
+	private UpsResultModel disposePayOrCollect(UpsParamModel upm, MerchantOrderTypeEntity mote) {
+		// 路由逻辑
+		String payChannel = getPayChannel(upm, mote);
 		upm.setPayChannel(payChannel);
-
 		// 协议代扣验证是否有先签约
 		if (Objects.equals(upm.getOrderType(), OrderType.PROTOCOL_COLLECT)) {
-			// 查询用户协议信息
-			UpsAuthSignEntity uasbe = upsAuthSignBaofooService.queryProtocolSignBaofoo(upm.getFromSystem(),
+			// 查询用户协议信
+			UpsAuthSignEntity uasbe = upsAuthSignBaofooService.queryProtocolSign(upm.getProductId(),
 					upm.getPayChannel(), upm.getUserNo(), upm.getBankCard());
 			if (Objects.isNull(uasbe) || StringUtils.isBlank(uasbe.getTppSignNo())) {
 				logger.error("宝付协议代扣未查到用户签约信息！查询信息：{}", uasbe);
 				return new UpsResultModel(UpsResultEnum.NO_PROPTOCAL);
 			}
 		}
-
-		// 通过订单查询支付配置信息
+		// 查询支付配置信息
 		UpsThirdpartyConfigEntity upsThirdpartyConfigEntity = upsThirdpartyConfigService
-				.queryThirdpartyConfig(upm.getPayChannel(), upm.getOrderType(), upm.getFromSystem());
+				.queryThirdpartyConfig(upm.getPayChannel(), upm.getOrderType(), upm.getProductId());
 		Map<String, Object> configDateMap = JSONObject.parseObject(upsThirdpartyConfigEntity.getConfigDate(),
 				new TypeReference<Map<String, Object>>() {
 				});
-		// 创建订单
+		// 创建订单并保存
 		UpsOrderEntity upsOrderEntity = upsOrderService.createUpsOrder(upm);
 		// 将第三方渠道调用配置放入订单实体中
 		upsOrderEntity.setUpsConfigDate(configDateMap);
 		upsOrderEntity.setUpsParamModel(upm);
 		// 处理并返回结果
-		UpsResultModel upsResultModel = bussinessHandlerFactory.getInstance(upm).handler(upsOrderEntity);
-		// UpsResultModel upsResultModel = new UpsResultModel(UpsResultEnum.SUCCESS,
-		// "123");
+
+		UpsResultModel upsResultModel;
+		if (Objects.equals(upm.getOrderType(), OrderType.PAY)) {
+			upsResultModel = handlerFactory.pay(upsOrderEntity);
+		}else{
+			 upsResultModel = handlerFactory.collect(upsOrderEntity);
+		}
 		return recordAndReturnResult(upsResultModel);
+	}
+
+	/**
+	 * 获取路由
+	 *
+	 * @param upsParamModel
+	 * @throws ParamValidException
+	 */
+	private String getPayChannel(UpsParamModel upm, MerchantOrderTypeEntity mote) {
+		// 若商户端未指定路由，且商户支付路由策略为开启默认，则设为默认路由
+		if (Objects.equals(mote.getRouteStatus(), MerchantOrderTypeService.OPEN_DEFAULT)) {
+			String payChannel = mote.getDefaultPayChannel();
+			if (StringUtils.isBlank(payChannel)) {
+				throw new BussinessException("默认路由不能为空！");
+			}
+			PayCompanyService.confirmPayChanelisAvaliable(payChannel);
+			return payChannel;
+		} else {
+			return routeService.obtainAvalibaleRoute(upm);
+		}
+		
 	}
 
 	/**
@@ -332,13 +379,17 @@ public class IndexController {
 	 */
 
 	private void recordAndVerifyParam(UpsParamModel upsParamModel) throws ParamValidException {
+		UpsProductEntity upsProductEntity =	upsProductService.getEnableProduct(new Long(1));
+		if(upsProductEntity == null){
+			throw new ParamValidException("产品没找到或未开通");
+		}
 		UpsLogEntity upsLogEntity = upsLogService.createUpsLog(upsParamModel, request.getRequestURI());
 		// 保存当前请求日志对象
 		request.setAttribute(RequestAttributeName.UPS_LOG_ENTITY, upsLogEntity);
 		// 参数合法性验证
 		ValidateUtils.validate(upsParamModel);
 		// 查询商户配置公钥
-		String publicKey = merchantConfigService.queryMerchantPublicKey(upsParamModel.getFromSystem());
+		String publicKey = merchantConfigService.queryMerchantPublicKey(upsParamModel.getProductId());
 		// RSA验证签名
 		SecurityUtils.signVerification(upsParamModel, publicKey);
 		// 获取当前环境
@@ -370,4 +421,21 @@ public class IndexController {
 		upsLogService.updateUpsLog(upsLogEntity);
 		return upsResultModel;
 	}
+
+	@ResponseBody
+	@PrintExecuteTime
+	@PostMapping("/merchant/datasyn")
+	public void datasyn(@RequestBody  String json){
+		JSONObject  dataJson = JSONObject.parseObject(json);
+		UpsMerchantTransitionEntity upsMerchantTransitionEntity =	JSONObject.toJavaObject(dataJson,UpsMerchantTransitionEntity.class);
+		upsProductService.saveTransitionEntity(upsMerchantTransitionEntity);
+	}
+
+
+
+
+
 }
+
+
+

@@ -31,8 +31,8 @@ public class RouteMaintenanceEntity extends Model{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="merchant_name")
-	private String merchantName;
+	@Column(name="product_id")
+	private Long productId;
 	
 	@Column(name="order_type")
 	private String orderType;
@@ -76,12 +76,12 @@ public class RouteMaintenanceEntity extends Model{
 		this.id = id;
 	}
 
-	public String getMerchantName() {
-		return merchantName;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setMerchantName(String merchantName) {
-		this.merchantName = merchantName;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public String getOrderType() {

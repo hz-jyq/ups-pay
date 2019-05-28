@@ -83,7 +83,7 @@ public class YeepayCollectOrderQueryServiceImpl implements OrderQueryService<Str
 	public String doSingleQuery(OrderPushEntity ope, boolean queryOnly) throws BussinessException{
 		// 查询配置
 		UpsThirdpartyConfigEntity config = upsThirdpartyConfigService.queryThirdpartyConfig(PAY_CHANNEL,
-				OrderType.COLLECT, ope.getFromSystem());
+				OrderType.COLLECT, ope.getProductId());
 		Map<String, Object> configMap = JSONObject.parseObject(config.getConfigDate(),
 				new TypeReference<Map<String, Object>>() {
 				});

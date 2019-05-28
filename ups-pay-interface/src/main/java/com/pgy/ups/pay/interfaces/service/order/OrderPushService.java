@@ -37,6 +37,11 @@ public interface OrderPushService {
 	 * 推送订单至业务端
 	 */
 	void pushOrder();
+	
+	/**
+	 * 推送单个订单至业务端
+	 */
+	void pushOrder(OrderPushEntity ope);
     
 	/**
 	 * 重置订查询送次数和时间

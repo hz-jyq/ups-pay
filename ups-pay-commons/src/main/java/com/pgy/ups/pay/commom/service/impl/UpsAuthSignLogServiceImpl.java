@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import com.pgy.ups.pay.commom.dao.UpsAuthSignLogDao;
 import com.pgy.ups.pay.interfaces.entity.UpsUserSignLogEntity;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignLogService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignLogService;
 import org.springframework.stereotype.Service;
 
 

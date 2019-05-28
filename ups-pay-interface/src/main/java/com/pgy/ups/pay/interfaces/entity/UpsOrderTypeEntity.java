@@ -1,16 +1,21 @@
 package com.pgy.ups.pay.interfaces.entity;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pgy.ups.pay.interfaces.model.Model;
 
 @Entity
@@ -51,7 +56,16 @@ public class UpsOrderTypeEntity extends Model{
 
 	@Column(name = "update_user")
 	private String updateUser;
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "upsOrderTypeEntity")
+	private List<MerchantOrderTypeEntity> merchantOrderTypeList;
+	
 
+	/*@ManyToMany(mappedBy="orderTypeList",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	private List<MerchantConfigEntity> merchantConfigList;*/
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -123,7 +137,14 @@ public class UpsOrderTypeEntity extends Model{
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
 	}
-	
-	
 
+	public List<MerchantOrderTypeEntity> getMerchantOrderTypeList() {
+		return merchantOrderTypeList;
+	}
+
+	public void setMerchantOrderTypeList(List<MerchantOrderTypeEntity> merchantOrderTypeList) {
+		this.merchantOrderTypeList = merchantOrderTypeList;
+	}
+
+	
 }

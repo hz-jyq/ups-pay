@@ -48,7 +48,7 @@ public class BaofooPayOrderQueryServiceImpl implements OrderQueryService<String>
 
 	private Logger logger = LoggerFactory.getLogger(BaofooPayOrderQueryServiceImpl.class);
 
-	@Value("${ups.runtime.environment.rsa.path}")
+	@Value("${ups.baofoo.rsa.path}")
 	private String RSA_KEY_PATH;
 
 	private static final String PAY_CHANNEL = "baofoo";
@@ -79,20 +79,19 @@ public class BaofooPayOrderQueryServiceImpl implements OrderQueryService<String>
 	@Override
 	public String doSingleQuery(OrderPushEntity ope, boolean queryOnly) throws BussinessException{
 		UpsThirdpartyConfigEntity config = upsThirdpartyConfigService.queryThirdpartyConfig(PAY_CHANNEL, OrderType.PAY,
-				ope.getFromSystem());
+				ope.getProductId());
 		// 抽取配置信息
 		Map<String, Object> configMap = JSONObject.parseObject(config.getConfigDate(),new TypeReference<Map<String, Object>>() {});
 		String memberId = MapUtils.getString(configMap, "member_id", "");
 		String terminalId = MapUtils.getString(configMap, "terminal_id", "");
-		String dataType = MapUtils.getString(configMap, "data_type", "");
-		String version = MapUtils.getString(configMap, "version", "");
+		String dataType = "json";//MapUtils.getString(configMap, "data_type", "");
+		String version = "4.0.0";//MapUtils.getString(configMap, "version", "");
 		String privateKey = MapUtils.getString(configMap, "private_key", "");
 		String publicKey = MapUtils.getString(configMap, "public_key", "");
 		String keyStorePassword = MapUtils.getString(configMap, "key_store_password", "");
 		String queryUrl = MapUtils.getString(configMap, "query_url", "");
-
 		if (StringUtils.isAnyBlank(memberId, terminalId, dataType, version, privateKey, publicKey, queryUrl)) {
-			logger.error("宝付代付交易查询读取配置信息异常:{}", configMap);
+			logger.error("宝付代付交易查询读取配置信息异常:{}", configMap.toString());
 			throw new BussinessException("宝付代付交易查询读取配置信息异常");
 		}
 		privateKey = RSA_KEY_PATH + privateKey;

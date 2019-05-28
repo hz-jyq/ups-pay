@@ -27,8 +27,8 @@ public class CollectChooseServiceImpl implements CollectChooseService, Cacheable
 	private CacheUtils cacheUtils;
 
 	@Override
-	public CollectChooseEntity queryCollectType(String fromSystem) {
-		String key=CacheUtils.generateKey(fromSystem);
+	public CollectChooseEntity queryCollectType(Long productId) {
+		String key=CacheUtils.generateKey(String.valueOf(productId));
 		CollectChooseEntity cce=cacheUtils.getCacheByRediskeynameAndKey(UPS_COLLECT_CHOOSE_CACHE, key, CollectChooseEntity.class);
 		return cce;
 	}
@@ -45,7 +45,7 @@ public class CollectChooseServiceImpl implements CollectChooseService, Cacheable
 		Map<String, CollectChooseEntity> cacheMap = new HashMap<>();
 		List<CollectChooseEntity> list = getActiveCollectChooseEntityList();
 		for (CollectChooseEntity cce : list) {
-			cacheMap.put(CacheUtils.generateKey(cce.getMerchantName()), cce);
+			cacheMap.put(CacheUtils.generateKey(cce.getProductId()), cce);
 		}
 		return cacheMap;
 	}

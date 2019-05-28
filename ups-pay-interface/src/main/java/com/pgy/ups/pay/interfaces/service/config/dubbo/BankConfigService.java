@@ -11,6 +11,12 @@ import com.pgy.ups.pay.interfaces.form.UpsBankForm;
  */
 public interface BankConfigService {
 	
-     PageInfo<UpsBankEntity> queryAll(UpsBankForm upsBankForm);
+     PageInfo<UpsBankEntity> queryByForm(UpsBankForm upsBankForm);
+     
+     void deleteBankConfigById(Long id);
+
+     UpsBankEntity saveBankConfig(UpsBankForm form);
+     
+     
 
 }

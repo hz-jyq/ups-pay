@@ -2,7 +2,7 @@ package com.pgy.ups.pay.commom.service.impl;
 
 import com.pgy.ups.pay.commom.dao.UpsSignDefaultConfigDao;
 import com.pgy.ups.pay.interfaces.entity.UpsSignDefaultConfigEntity;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsSignDefaultConfigervice;
+import com.pgy.ups.pay.interfaces.service.auth.UpsSignDefaultConfigervice;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +16,9 @@ public class UpsSignDefaultConfigerviceImpl  implements UpsSignDefaultConfigervi
     private UpsSignDefaultConfigDao upsSignDefaultConfigDao;
 
     @Override
-    public UpsSignDefaultConfigEntity queryUpsSignDefaultConfig(String fromSystem) {
+    public UpsSignDefaultConfigEntity queryUpsSignDefaultConfig(Long productId) {
         UpsSignDefaultConfigEntity upsSignDefaultConfigEntity = new UpsSignDefaultConfigEntity();
-        upsSignDefaultConfigEntity.setFormSystem(fromSystem);
+        upsSignDefaultConfigEntity.setProductId(productId);
         return selectEntity(upsSignDefaultConfigEntity);
     }
 

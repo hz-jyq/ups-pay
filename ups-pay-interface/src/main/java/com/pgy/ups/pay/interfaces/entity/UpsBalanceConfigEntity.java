@@ -20,7 +20,7 @@ public class UpsBalanceConfigEntity  extends BaseEntity {
     protected   Long id;
 
     @Column(name = "from_system")
-    private String fromSystem;
+    private String productId;
 
 
 
@@ -32,12 +32,12 @@ public class UpsBalanceConfigEntity  extends BaseEntity {
 
 
 
-    public String getFromSystem() {
-        return fromSystem;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setFromSystem(String fromSystem) {
-        this.fromSystem = fromSystem;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getPayChannel() {

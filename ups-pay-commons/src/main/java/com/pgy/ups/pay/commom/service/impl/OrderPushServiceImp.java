@@ -1,9 +1,7 @@
 package com.pgy.ups.pay.commom.service.impl;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 import javax.annotation.Resource;
 
@@ -45,7 +43,7 @@ public class OrderPushServiceImp implements OrderPushService {
 
 	@Resource
 	private OrderPushDao orderPushDao;
-	
+
 	@Resource
 	private MerchantConfigService merchantConfigService;
 
@@ -112,46 +110,58 @@ public class OrderPushServiceImp implements OrderPushService {
 		logger.info("订单推送业务端任务开始！本次推送订单数：{}条", list.size());
 		// 遍历推送
 		for (OrderPushEntity ope : list) {
-
-			UpsOrderEntity oe = SpringUtils.getBean(UpsOrderService.class).queryByOrderId(ope.getOrderId());
-
-			// 封装返回参数
-			OrderPushModel orderPushModel = new OrderPushModel();
-			orderPushModel.setMerchantName(ope.getFromSystem());
-			orderPushModel.setPayChannel(ope.getPayChannel());
-			orderPushModel.setOrderType(ope.getOrderType());
-			orderPushModel.setUpsOrderId(ope.getOrderId());
-			orderPushModel.setOrderStatus(ope.getOrderStatus());
-			orderPushModel.setChannelResultCode(ope.getChannelResultCode());
-			orderPushModel.setChannelResultMsg(ope.getChannelResultMsg());
-			orderPushModel.setBussinessFlowNum(oe.getBusinessFlowNum());
-			orderPushModel.setSign(SecurityUtils.sign(orderPushModel, merchantConfigService.queryMerchantPrivateKey(ope.getFromSystem())));
-			boolean flag = false;
-			try {
-				String resultStr = OkHttpUtil.postForm(ope.getNotifyUrl(), ReflectUtils.objectToMap(orderPushModel));
-				flag = parseResult(resultStr);
-			} catch (Exception e) {
-				logger.error("订单推送业务端掉调用HttpClient异常：{},推送内容：{}", e, orderPushModel);
-				// 获取当前环境 非生产环境直接设为推送成功
-				flag = false;
-			}
-
-			// 根据返回状态处理
-			if (flag) {
-				logger.info("推送订单成功：{}", orderPushModel);
-				// 成功
-				ope.setPushStatus(OrderPushStatus.PUSH_FINSH);
-			} else {
-				// 失败
-				logger.info("推送订单失败：{}", orderPushModel);
-				ope.setPushStatus(OrderPushStatus.PUSH_ING);
-			}
-			// 增加推送次数
-			Integer pushCount = ope.getPushCount();
-			ope.setPushCount(++pushCount);
-			updateOrderPush(ope);
+			pushOrder(ope);
 		}
 		logger.info("订单推送业务端任务结束！");
+	}
+
+	@Override
+	public void pushOrder(OrderPushEntity ope) {
+		UpsOrderEntity oe = SpringUtils.getBean(UpsOrderService.class).queryByOrderId(ope.getOrderId());
+		if(oe == null){
+			logger.info("订单没有找到!{}",ope.getOrderId());
+			return;
+		}
+		// 封装返回参数
+		OrderPushModel orderPushModel = new OrderPushModel();
+		orderPushModel.setProductId(ope.getProductId());
+		orderPushModel.setPayChannel(ope.getPayChannel());
+		orderPushModel.setOrderType(ope.getOrderType());
+		orderPushModel.setUpsOrderId(ope.getOrderId());
+		orderPushModel.setOrderStatus(ope.getOrderStatus());
+		orderPushModel.setChannelResultCode(ope.getChannelResultCode());
+		orderPushModel.setChannelResultMsg(ope.getChannelResultMsg());
+		orderPushModel.setBussinessFlowNum(oe.getBusinessFlowNum());
+		orderPushModel.setRemake(oe.getRemark());
+		orderPushModel.setSign(
+				SecurityUtils.sign(orderPushModel, merchantConfigService.queryMerchantPrivateKey(ope.getProductId())));
+		logger.info("推送信息{}",orderPushModel);
+		boolean flag = false;
+		try {
+			String resultStr = OkHttpUtil.post(ope.getNotifyUrl(), JSONObject.toJSONString(orderPushModel));
+			logger.info("业务http返回结果,类型{},订单号{}{}",ope.getOrderType(),ope.getOrderId(),resultStr);
+			flag = parseResult(resultStr);
+		} catch (Exception e) {
+			logger.error("订单推送业务端掉调用HttpClient异常：{},推送内容：{}", e, orderPushModel);
+			// 获取当前环境 非生产环境直接设为推送成功
+			flag = false;
+		}
+
+		// 根据返回状态处理
+		if (flag) {
+			logger.info("推送订单成功：{}", orderPushModel);
+			// 成功
+			ope.setPushStatus(OrderPushStatus.PUSH_FINSH);
+		} else {
+			// 失败
+			logger.info("推送订单失败：{}", orderPushModel);
+			ope.setPushStatus(OrderPushStatus.PUSH_ING);
+		}
+		// 增加推送次数
+		Integer pushCount = ope.getPushCount();
+		ope.setPushCount(++pushCount);
+		updateOrderPush(ope);
+
 	}
 
 	private boolean parseResult(String resultStr) {

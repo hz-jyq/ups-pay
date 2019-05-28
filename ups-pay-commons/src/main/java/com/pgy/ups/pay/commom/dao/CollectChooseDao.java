@@ -7,7 +7,7 @@ import com.pgy.ups.pay.interfaces.entity.CollectChooseEntity;
 
 public interface CollectChooseDao extends JpaRepository<CollectChooseEntity, Long> {
 
-	@Query("from CollectChooseEntity e where e.merchantName=?1 and e.active=true")
-	CollectChooseEntity queryByMerchantName(String fromSystem);
+	@Query("from CollectChooseEntity e where e.productId=?1 and e.active=true")
+	CollectChooseEntity queryByMerchantName(String productId);
 
 }

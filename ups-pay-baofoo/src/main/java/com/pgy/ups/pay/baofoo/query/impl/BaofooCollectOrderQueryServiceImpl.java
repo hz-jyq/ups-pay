@@ -48,7 +48,7 @@ public class BaofooCollectOrderQueryServiceImpl implements OrderQueryService<Str
 
 	private Logger logger = LoggerFactory.getLogger(BaofooCollectOrderQueryServiceImpl.class);
 
-	@Value("${ups.runtime.environment.rsa.path}")
+	@Value("${ups.baofoo.rsa.path}")
 	private String RSA_KEY_PATH;
 
 	private static final String PAY_CHANNEL = "baofoo";
@@ -81,18 +81,18 @@ public class BaofooCollectOrderQueryServiceImpl implements OrderQueryService<Str
 	public String doSingleQuery(OrderPushEntity ope, boolean queryOnly) throws BussinessException {
 		// 查询配置
 		UpsThirdpartyConfigEntity config = upsThirdpartyConfigService.queryThirdpartyConfig(PAY_CHANNEL,
-				OrderType.COLLECT, ope.getFromSystem());
+				OrderType.COLLECT, ope.getProductId());
 		Map<String, Object> configMap = JSONObject.parseObject(config.getConfigDate(),
 				new TypeReference<Map<String, Object>>() {
 				});
 		String member_id = MapUtils.getString(configMap, "member_id", "");
 		String terminal_id = MapUtils.getString(configMap, "terminal_id", "");
-		String biz_type = MapUtils.getString(configMap, "biz_type", "");
-		String txn_type = MapUtils.getString(configMap, "txn_type", "");
-		String data_type = MapUtils.getString(configMap, "data_type", "");
+		String biz_type ="0000";// MapUtils.getString(configMap, "biz_type", "");
+		String txn_type = "0431";MapUtils.getString(configMap, "txn_type", "");
+		String data_type = "json";//MapUtils.getString(configMap, "data_type", "");
 		String private_key = MapUtils.getString(configMap, "private_key", "");
 		String public_key = MapUtils.getString(configMap, "public_key", "");
-		String version = MapUtils.getString(configMap, "version", "");
+		String version = "4.0.0";//MapUtils.getString(configMap, "version", "");
 		String key_store_password = MapUtils.getString(configMap, "key_store_password", "");
 		String query_url = MapUtils.getString(configMap, "query_url", "");
 		if (StringUtils.isAnyBlank(member_id, terminal_id, biz_type, txn_type, data_type, private_key, public_key,

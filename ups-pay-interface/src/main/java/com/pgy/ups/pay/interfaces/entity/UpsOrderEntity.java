@@ -37,8 +37,8 @@ public class UpsOrderEntity extends EncryptModel{
 	@Column(name="ups_order_code")
 	private String upsOrderCode;
 	
-	@Column(name="from_system")
-	private String fromSystem;
+	@Column(name="product_id")
+	private Long productId;
 	
 	@Column(name="order_type")
 	private String orderType;
@@ -113,12 +113,12 @@ public class UpsOrderEntity extends EncryptModel{
 	}
 
 	
-	public String getFromSystem() {
-		return fromSystem;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setFromSystem(String fromSystem) {
-		this.fromSystem = fromSystem;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public String getOrderType() {

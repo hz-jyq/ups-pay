@@ -9,8 +9,8 @@ import com.pgy.ups.pay.interfaces.entity.UpsAuthSignEntity;
 import com.pgy.ups.pay.interfaces.entity.UpsUserSignLogEntity;
 import com.pgy.ups.pay.interfaces.enums.SignTypeEnum;
 import com.pgy.ups.pay.interfaces.model.UpsParamModel;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignLogService;
-import com.pgy.ups.pay.interfaces.service.authSign.UpsAuthSignService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignLogService;
+import com.pgy.ups.pay.interfaces.service.auth.UpsAuthSignService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -31,7 +31,7 @@ public class SignatureBindBaseCore {
     public UpsAuthSignEntity checkBaofooSignatureBind(UpsParamModel orderEntity, SignTypeEnum signTypeEnum) {
         PgyDataHandlerService pgyDataHandlerService = new PgyDataHandlerServiceImpl();
         UpsAuthSignEntity upsAuthSignBaofooEntity = new UpsAuthSignEntity();
-        upsAuthSignBaofooEntity.setFromSystem(orderEntity.getFromSystem());
+        upsAuthSignBaofooEntity.setProductId(orderEntity.getProductId());
         upsAuthSignBaofooEntity.setPayChannel(orderEntity.getPayChannel());
         upsAuthSignBaofooEntity.setUserNo(orderEntity.getUserNo());
         upsAuthSignBaofooEntity.setBankMd5(pgyDataHandlerService.md5(orderEntity.getBankCard()));
@@ -55,7 +55,7 @@ public class SignatureBindBaseCore {
         upsAuthSignEntity.setPayChannel(orderEntity.getPayChannel());
         upsAuthSignEntity.setUserNo(orderEntity.getUserNo());
         upsAuthSignEntity.setBankCode(orderEntity.getBankCode());
-        upsAuthSignEntity.setFromSystem(orderEntity.getFromSystem());
+        upsAuthSignEntity.setProductId(orderEntity.getProductId());
         upsAuthSignEntity.setBusinessFlowNum(orderEntity.getBusinessFlowNum());
         upsAuthSignEntity.setBusinessType(orderEntity.getBusinessType());
         return upsAuthSignEntity;
@@ -73,11 +73,11 @@ public class SignatureBindBaseCore {
     }
 
     protected String getUpsOrderNo(UpsParamModel upsParamModel) {
-        return upsParamModel.getPayChannel() + upsParamModel.getFromSystem() + IdGenerateWorker.getInstance().nextId();
+        return upsParamModel.getPayChannel() + upsParamModel.getProductId() + IdGenerateWorker.getInstance().nextId();
     }
 
     protected String getUpsUserId(UpsParamModel upsParamModel) {
-        return MD5Utils.MD5Encode(upsParamModel.getPayChannel() + upsParamModel.getFromSystem() + upsParamModel.getUserNo() + upsParamModel.getPhoneNo() + upsParamModel.getBankCard(), "UTF-8");
+        return MD5Utils.MD5Encode(upsParamModel.getPayChannel() + upsParamModel.getProductId() + upsParamModel.getUserNo() + upsParamModel.getPhoneNo() + upsParamModel.getBankCard(), "UTF-8");
     }
 
 
@@ -93,7 +93,7 @@ public class SignatureBindBaseCore {
         UpsUserSignLogEntity upsUserSignLogEntity = new UpsUserSignLogEntity();
         userEncrypt(upsParamModel,upsUserSignLogEntity);
         upsUserSignLogEntity.setId(IdGenerateWorker.getInstance().nextId());
-        upsUserSignLogEntity.setFormSystem(upsParamModel.getFromSystem());
+        upsUserSignLogEntity.setProductId(upsParamModel.getProductId());
         upsUserSignLogEntity.setOrderType(upsParamModel.getOrderType());
         upsUserSignLogEntity.setBusinessFlowNum(upsParamModel.getBusinessFlowNum());
         upsUserSignLogEntity.setUserNo(upsParamModel.getUserNo());
