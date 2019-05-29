@@ -1,7 +1,10 @@
 package com.pgy.ups.pay.commom.service.impl;
 
-import java.io.IOException;
+
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 
@@ -18,7 +21,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.pgy.ups.common.utils.DateUtils;
 import com.pgy.ups.common.utils.OkHttpUtil;
-import com.pgy.ups.common.utils.ReflectUtils;
 import com.pgy.ups.common.utils.SpringUtils;
 import com.pgy.ups.pay.commom.constants.OrderPushStatus;
 import com.pgy.ups.pay.commom.dao.OrderPushDao;
@@ -46,6 +48,8 @@ public class OrderPushServiceImp implements OrderPushService {
 
 	@Resource
 	private MerchantConfigService merchantConfigService;
+
+	private static ExecutorService executor = Executors.newFixedThreadPool(8);
 
 	@Override
 	public OrderPushEntity queryByOrderId(Long upsOrderId) {
@@ -108,15 +112,43 @@ public class OrderPushServiceImp implements OrderPushService {
 		List<OrderPushEntity> list = this.queryFinalStatusOrderPushList();
 
 		logger.info("订单推送业务端任务开始！本次推送订单数：{}条", list.size());
-		// 遍历推送
+		// 遍历推送使用多线程处理加快推送速度
+		CountDownLatch latch = new CountDownLatch(list.size());
 		for (OrderPushEntity ope : list) {
-			pushOrder(ope);
+			executor.submit(() -> new SimpleRunnable(ope,latch));
+		}
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			logger.error("线程异常",e);
 		}
 		logger.info("订单推送业务端任务结束！");
 	}
 
+	private  class SimpleRunnable implements Runnable{
+
+		private  final CountDownLatch latch;
+
+		private  final  OrderPushEntity orderPushEntity;
+
+		public  SimpleRunnable(OrderPushEntity orderPushEntity,CountDownLatch latch){
+			this.orderPushEntity  = orderPushEntity;
+			this.latch = latch;
+			run();
+		}
+
+
+		@Override
+		public void run() {
+			try {
+				pushOrder(orderPushEntity);
+			}finally {
+				latch.countDown();
+			}
+		}
+	}
 	@Override
-	public void pushOrder(OrderPushEntity ope) {
+	public void pushOrder(OrderPushEntity ope)  {
 		UpsOrderEntity oe = SpringUtils.getBean(UpsOrderService.class).queryByOrderId(ope.getOrderId());
 		if(oe == null){
 			logger.info("订单没有找到!{}",ope.getOrderId());
