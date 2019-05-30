@@ -254,19 +254,20 @@ public class IndexController{
 	@ResponseBody
 	@PrintExecuteTime
 	@RequestMapping("/signature.do")
-	public UpsResultModel signature(UpsSignatureParamModel upsBindCardParamModel) throws ParamValidException {
-		logger.info("统一签约入参：{}", upsBindCardParamModel);
+	public UpsResultModel signature(UpsSignatureParamModel upsSignatureParamModel) throws ParamValidException {
+		logger.info("统一签约入参：{}", upsSignatureParamModel);
+		recordAndVerifyParam(upsSignatureParamModel);
 		UpsSignDefaultConfigEntity entity = upsSignDefaultConfigervice
-				.queryUpsSignDefaultConfig(upsBindCardParamModel.getProductId());
+				.queryUpsSignDefaultConfig(upsSignatureParamModel.getProductId());
 		String signType = entity == null ? SignTypeEnum.PROTOCOL.getCode() : entity.getSignType();
         String orderType = OrderType.SignatureMap.get(signType);
 		MerchantOrderTypeEntity mote = merchantOrderTypeService
-						.confirmMerchantOrderType(upsBindCardParamModel.getProductId(),orderType);
-		upsBindCardParamModel.setOrderType(orderType);
+						.confirmMerchantOrderType(upsSignatureParamModel.getProductId(),orderType);
+		upsSignatureParamModel.setOrderType(orderType);
 		// 返回并设置路由
-		String payChannel = getPayChannel(upsBindCardParamModel, mote);
-		upsBindCardParamModel.setPayChannel(payChannel);
-		UpsResultModel upsResultModel = handlerFactory.signature(upsBindCardParamModel);
+		String payChannel = getPayChannel(upsSignatureParamModel, mote);
+		upsSignatureParamModel.setPayChannel(payChannel);
+		UpsResultModel upsResultModel = handlerFactory.signature(upsSignatureParamModel);
 		return recordAndReturnResult(upsResultModel);
 	}
 
