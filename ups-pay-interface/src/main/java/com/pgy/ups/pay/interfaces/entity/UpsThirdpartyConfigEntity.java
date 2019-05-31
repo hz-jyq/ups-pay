@@ -29,7 +29,7 @@ public class UpsThirdpartyConfigEntity extends Model{
 
 	
 	@Column(name="product_id")
-	private String productId;
+	private Long productId;
 	
 	@Column(name="pay_channel")
 	private String payChannel;
@@ -128,11 +128,11 @@ public class UpsThirdpartyConfigEntity extends Model{
 		this.configDate = configDate;
 	}
 
-	public String getProductId() {
+	public Long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(String productId) {
+	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
 

@@ -68,7 +68,7 @@ public class UpsThirdpartyConfigServiceImpl
 		List<UpsThirdpartyConfigEntity> list = upsThirdpartyConfigDao.findAll();
 		Map<String, UpsThirdpartyConfigEntity> cache = new LinkedHashMap<>();
 		for (UpsThirdpartyConfigEntity e : list) {
-			cache.put(CacheUtils.generateKey(e.getPayChannel(), e.getOrderType(), e.getProductId()), e);
+			cache.put(CacheUtils.generateKey(e.getPayChannel(), e.getOrderType(), String.valueOf(e.getProductId())), e);
 		}
 		return cache;
 	}

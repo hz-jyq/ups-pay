@@ -144,11 +144,11 @@ public class BaofooProtocolCollectServiceImpl implements ProtocolCollectService 
 		String cipher_dgtl_envlp;
 		try {
 			cipher_dgtl_envlp = BaofooRsaCodingUtil
-					.encryptByPubCerFile(BaofooSecurityUtil.Base64Encode("01|" + aes_key), public_key);
+					.encryptByPubCerFile(BaofooSecurityUtil.Base64Encode("01|" + aes_key), publicKeyRsa);
 		} catch (UnsupportedEncodingException e) {
 			logger.error("宝付协议代扣对称秘钥加密发生异常{}", ExceptionUtils.getStackTrace(e));
 			logger.info("宝付协议代扣对称秘钥AES_KEY:{}", aes_key);
-			logger.info("宝付协议代扣公钥：PUBLIC_KEY:{}", public_key);
+			logger.info("宝付协议代扣公钥：PUBLIC_KEY:{}", publicKeyRsa);
 			logger.info("加密内容：{}", "01|" + aes_key);
 			throw new BussinessException("宝付协议代扣对称秘钥加密发生异常！");
 		}
