@@ -125,6 +125,8 @@ public class UpsOrderServiceImpl implements UpsOrderService {
 		// 订单编码生成
 		uspOrderEntity.setUpsOrderCode(getUpsOrderCode(uspOrderEntity));
 
+		uspOrderEntity.setRemark(upsParamModel.getRemark());
+
 		uspOrderEntity = upsOrderDao.saveAndFlush(uspOrderEntity);
 
 		updateUspLog(uspOrderEntity);

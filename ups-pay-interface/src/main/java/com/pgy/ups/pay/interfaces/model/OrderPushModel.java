@@ -28,17 +28,12 @@ public class OrderPushModel extends Model implements Signable {
 
 	private String bussinessFlowNum;
 
-	public String getRemake() {
-		return remake;
-	}
 
-	public void setRemake(String remake) {
-		this.remake = remake;
-	}
 
 	private String sign;
 
-	public  String remake;
+
+	public  String remark;
 
 	public void setProductId(Long productId) {
 		this.productId = productId;
@@ -109,6 +104,19 @@ public class OrderPushModel extends Model implements Signable {
 
 	public void setSign(String sign) {
 		this.sign = sign;
+	}
+
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	@Override

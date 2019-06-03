@@ -164,7 +164,7 @@ public class OrderPushServiceImp implements OrderPushService {
 		orderPushModel.setChannelResultCode(ope.getChannelResultCode());
 		orderPushModel.setChannelResultMsg(ope.getChannelResultMsg());
 		orderPushModel.setBussinessFlowNum(oe.getBusinessFlowNum());
-		orderPushModel.setRemake(oe.getRemark());
+		orderPushModel.setRemark(oe.getRemark());
 		orderPushModel.setSign(
 				SecurityUtils.sign(orderPushModel, merchantConfigService.queryMerchantPrivateKey(ope.getProductId())));
 		logger.info("推送信息{}",orderPushModel);
