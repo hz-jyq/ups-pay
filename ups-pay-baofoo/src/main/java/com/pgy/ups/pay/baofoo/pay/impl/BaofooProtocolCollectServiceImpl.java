@@ -179,7 +179,7 @@ public class BaofooProtocolCollectServiceImpl implements ProtocolCollectService 
 		String sign = "";
 		try {
 			String signature = BaofooSecurityUtil.sha1X16(signVStr, "UTF-8");
-			sign = BaofooSignatureUtil.encryptByRSA(signature, private_key, key_store_password);
+			sign = BaofooSignatureUtil.encryptByRSA(signature, publicKeyRsa, key_store_password);
 		} catch (Exception e) {
 			logger.error("宝付协议代扣签名发生异常:{}", ExceptionUtils.getStackTrace(e));
 			throw new BussinessException("宝付协议代扣签名发生异常！");
