@@ -4,8 +4,8 @@ import com.pgy.ups.pay.interfaces.common.Signable;
 
 public class OrderPushModel extends Model implements Signable {
 
-	private static final String[] SIGN_RULE = new String[] { "merchantName", "payChannel", "orderType", "upsOrderId",
-			"orderStatus", "channelResultMsg", "channelResultCode", "bussinessFlowNum","remake"};
+	private static final String[] SIGN_RULE = new String[] { "productId", "payChannel", "orderType", "upsOrderId",
+			"orderStatus", "channelResultMsg", "channelResultCode", "bussinessFlowNum","remark"};
 
 	/**
 	 * 
