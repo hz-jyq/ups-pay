@@ -112,7 +112,7 @@ public class BaofooProtocolCollectOrderQueryServiceImpl implements OrderQuerySer
 		String aes_key = MapUtils.getString(configMap, "aes_key", "");
 		String private_key = MapUtils.getString(configMap, "private_key", "");
 		String public_key = MapUtils.getString(configMap, "public_key", "");
-		String version = "4.0.0";//MapUtils.getString(configMap, "version", "");
+		String version = "4.0.0.0";//MapUtils.getString(configMap, "version", "");
 		String key_store_password = MapUtils.getString(configMap, "key_store_password", "");
 		String query_url = MapUtils.getString(configMap, "query_url", "");
 
