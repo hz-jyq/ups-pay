@@ -114,14 +114,9 @@ public class CacheUtils {
 		if (Objects.isNull(value)) {
 			return false;
 		}
-		Map<String, String> cache = redisUtils.getMap(rediskeyName, String.class);
-		if (MapUtils.isEmpty(cache)) {
-			Map<String, String> cacheMap = new LinkedHashMap<>();
-			cacheMap.put(key, JSON.toJSONStringWithDateFormat(value,JSON.DEFFAULT_DATE_FORMAT));
-		} else {
-			cache.put(key, JSON.toJSONStringWithDateFormat(value,JSON.DEFFAULT_DATE_FORMAT));
-		}
-		return setCacheByRediskeyname(rediskeyName, cache);
+		Map<String, String> cacheMap = new LinkedHashMap<>();
+		cacheMap.put(key, JSON.toJSONStringWithDateFormat(value,JSON.DEFFAULT_DATE_FORMAT));
+		return setCacheByRediskeyname(rediskeyName, cacheMap);
 	}
 
 	/**
