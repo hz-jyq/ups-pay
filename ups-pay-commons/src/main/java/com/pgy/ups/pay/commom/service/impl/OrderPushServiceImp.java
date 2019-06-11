@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 
+import com.pgy.ups.common.annotation.PrintExecuteTime;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
@@ -107,6 +108,7 @@ public class OrderPushServiceImp implements OrderPushService {
 
 	@Override
 	@Async
+	@PrintExecuteTime
 	public void pushOrder() {
 
 		List<OrderPushEntity> list = this.queryFinalStatusOrderPushList();
