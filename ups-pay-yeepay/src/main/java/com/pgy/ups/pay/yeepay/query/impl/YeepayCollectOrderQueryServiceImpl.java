@@ -146,7 +146,7 @@ public class YeepayCollectOrderQueryServiceImpl implements OrderQueryService<Str
 		String errorcode = MapUtils.getString(result, "errorcode", "");
 		String errormsg = MapUtils.getString(result, "errormsg", "");
 		// 查询订单
-		UpsOrderEntity upsOrderEntity = upsOrderService.queryByOrderId(ope.getOrderId());
+		UpsOrderEntity upsOrderEntity = upsOrderService.queryByOrderId(ope.getOrderId(),ope.getProductId());
 		// 更新订单和订单推送对象状态
 		ope.setChannelResultCode(status + " " + errorcode);
 		ope.setChannelResultMsg(errormsg);

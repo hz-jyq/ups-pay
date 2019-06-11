@@ -201,12 +201,8 @@ public class UpsOrderServiceImpl implements UpsOrderService {
 	}
 
 	@Override
-	public UpsOrderEntity queryByOrderId(Long orderId) {
-		Optional<UpsOrderEntity> optional = upsOrderDao.findById(orderId);
-		if (optional.isPresent()) {
-			return optional.get();
-		}
-		return null;
+	public UpsOrderEntity queryByOrderId(Long orderId,Long productId) {
+		return upsOrderDao.findByIdAndProductId(orderId,productId);
 	}
 
 	@Override

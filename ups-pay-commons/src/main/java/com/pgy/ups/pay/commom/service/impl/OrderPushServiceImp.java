@@ -151,7 +151,7 @@ public class OrderPushServiceImp implements OrderPushService {
 	}
 	@Override
 	public void pushOrder(OrderPushEntity ope)  {
-		UpsOrderEntity oe = SpringUtils.getBean(UpsOrderService.class).queryByOrderId(ope.getOrderId());
+		UpsOrderEntity oe = SpringUtils.getBean(UpsOrderService.class).queryByOrderId(ope.getOrderId(),ope.getProductId());
 		if(oe == null){
 			logger.info("订单没有找到!{}",ope.getOrderId());
 			return;

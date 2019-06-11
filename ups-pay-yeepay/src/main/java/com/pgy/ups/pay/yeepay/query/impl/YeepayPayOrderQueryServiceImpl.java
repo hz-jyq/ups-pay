@@ -166,7 +166,7 @@ public class YeepayPayOrderQueryServiceImpl implements OrderQueryService<String>
 		String bankMsg = MapUtils.getString(map, "bankMsg", "");
 
 		// 查询订单
-		UpsOrderEntity upsOrderEntity = upsOrderService.queryByOrderId(ope.getOrderId());
+		UpsOrderEntity upsOrderEntity = upsOrderService.queryByOrderId(ope.getOrderId(),ope.getProductId());
 		// 更新订单和订单推送对象状态
 		ope.setChannelResultCode(errorCode + " " + transferStatusCode + " " + bankTrxStatusCode);
 		ope.setChannelResultMsg(bankMsg);
