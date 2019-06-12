@@ -380,7 +380,7 @@ public class IndexController{
 	 */
 
 	private void recordAndVerifyParam(UpsParamModel upsParamModel) throws ParamValidException {
-		UpsProductEntity upsProductEntity =	upsProductService.getEnableProduct(new Long(1));
+		UpsProductEntity upsProductEntity =	upsProductService.getEnableProduct(upsParamModel.getProductId());
 		if(upsProductEntity == null){
 			throw new ParamValidException("产品没找到或未开通");
 		}

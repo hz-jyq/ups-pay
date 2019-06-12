@@ -21,6 +21,7 @@ public class UpsProductServiceImpl implements UpsProductService {
     @Resource
     private UpsMerchantDao upsMerchantDao;
 
+    @Override
     public UpsProductEntity getEnableProduct(Long productId){
         return  upsProductDao.getEnableProduct(productId);
     }
