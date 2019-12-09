@@ -9,8 +9,7 @@
  spring boot + dubbo + redis + sharding-jdbc(以productId分表) + zk +  rateLimit
 项目启动
 -------  
- 启动zk，然后先启动 baofoo,yeapay Application的 dubbo服务器，在启动其他的 Application
-
+启动zk，然后先启动 baofoo,yeapay Application的 dubbo服务器，在启动其他的 Application
 <b>业务介绍</b><br>
 <hr/>
    1. 有代付代扣，签约，绑卡，协议绑卡，协议签约绑卡<br>
