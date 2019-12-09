@@ -4,15 +4,15 @@ import com.pgy.ups.pay.interfaces.common.Signable;
 
 public class OrderPushModel extends Model implements Signable {
 
-	private static final String[] SIGN_RULE = new String[] { "merchantName", "payChannel", "orderType", "upsOrderId",
-			"orderStatus", "channelResultMsg", "channelResultCode", "bussinessFlowNum" };
+	private static final String[] SIGN_RULE = new String[] { "productId", "payChannel", "orderType", "upsOrderId",
+			"orderStatus", "channelResultMsg", "channelResultCode", "bussinessFlowNum","remark"};
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8658858942148899154L;
 
-	private String merchantName;
+	private Long productId;
 
 	private String payChannel;
 
@@ -28,14 +28,15 @@ public class OrderPushModel extends Model implements Signable {
 
 	private String bussinessFlowNum;
 
+
+
 	private String sign;
 
-	public String getMerchantName() {
-		return merchantName;
-	}
 
-	public void setMerchantName(String merchantName) {
-		this.merchantName = merchantName;
+	public  String remark;
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public String getPayChannel() {
@@ -94,12 +95,28 @@ public class OrderPushModel extends Model implements Signable {
 		this.bussinessFlowNum = bussinessFlowNum;
 	}
 
+
+
+
 	public String getSign() {
 		return sign;
 	}
 
 	public void setSign(String sign) {
 		this.sign = sign;
+	}
+
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	@Override

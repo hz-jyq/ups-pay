@@ -19,7 +19,7 @@ public class UpsCollectParamModel extends UpsParamModel {
 	/**
 	 * 验签顺序
 	 */
-	private static final String[] SIGN_RULE = new String[] {"fromSystem", "userNo", "realName", "bankCard",
+	private static final String[] SIGN_RULE = new String[] {"productId", "userNo", "realName", "bankCard",
 			"identity", "bankCode", "phoneNo", "remark",  "businessType",
 			"businessFlowNum", "amount" };
 

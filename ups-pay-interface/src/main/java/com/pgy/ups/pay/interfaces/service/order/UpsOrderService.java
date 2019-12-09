@@ -21,7 +21,7 @@ public interface UpsOrderService {
 	UpsOrderEntity updateOrderAndCreateOrderPush(UpsOrderEntity orderEntity);
     
 	//根据id查询
-	UpsOrderEntity queryByOrderId(Long orderId);
+	UpsOrderEntity queryByOrderId(Long orderId,Long productId);
     
 	//更新订单和订单推送信息
 	void updateOrderAndupdateOrderPush(UpsOrderEntity upsOrderEntity, OrderPushEntity ope);

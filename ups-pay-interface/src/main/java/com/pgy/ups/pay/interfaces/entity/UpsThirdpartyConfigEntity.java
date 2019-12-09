@@ -28,8 +28,8 @@ public class UpsThirdpartyConfigEntity extends Model{
 	private Long id;
 
 	
-	@Column(name="from_system")
-	private String fromSystem;
+	@Column(name="product_id")
+	private Long productId;
 	
 	@Column(name="pay_channel")
 	private String payChannel;
@@ -128,12 +128,12 @@ public class UpsThirdpartyConfigEntity extends Model{
 		this.configDate = configDate;
 	}
 
-	public String getFromSystem() {
-		return fromSystem;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setFromSystem(String fromSystem) {
-		this.fromSystem = fromSystem;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public String getTppMerNo() {

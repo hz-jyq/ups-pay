@@ -34,8 +34,8 @@ public class UpsAuthSignEntity extends EncryptSignModel {
     @Column(name = "sign_type")
     private String signType;
 
-    @Column(name = "from_system")
-    private String fromSystem;
+    @Column(name = "product_id")
+    private Long productId;
 
 
 
@@ -128,12 +128,12 @@ public class UpsAuthSignEntity extends EncryptSignModel {
         this.signType = signType;
     }
 
-    public String getFromSystem() {
-        return fromSystem;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setFromSystem(String fromSystem) {
-        this.fromSystem = fromSystem;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
 

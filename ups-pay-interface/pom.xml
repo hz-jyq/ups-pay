@@ -45,6 +45,12 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.pgy</groupId>
+			<artifactId>data-handler-service</artifactId>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

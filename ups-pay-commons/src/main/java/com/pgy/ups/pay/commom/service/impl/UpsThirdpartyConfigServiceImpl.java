@@ -39,14 +39,14 @@ public class UpsThirdpartyConfigServiceImpl
 	private UpsThirdpartyConfigDao upsThirdpartyConfigDao;
 
 	@Override
-	public UpsThirdpartyConfigEntity queryThirdpartyConfig(String payChannel, String orderType, String fromSystem) {
+	public UpsThirdpartyConfigEntity queryThirdpartyConfig(String payChannel, String orderType, Long productId) {
 		// 先查询缓存
-		String key = CacheUtils.generateKey(payChannel, orderType, fromSystem);
+		String key = CacheUtils.generateKey(payChannel, orderType, String.valueOf(productId));
 		UpsThirdpartyConfigEntity config = cacheUtils.getCacheByRediskeynameAndKey(UPS_THIRDPARTY_CONFIG_CACHE, key,
 				UpsThirdpartyConfigEntity.class);
 		if (Objects.isNull(config)) {
 			// 若缓存不存在则查询数据库，并更新缓存
-			config = upsThirdpartyConfigDao.queryByFromSystemAndPayChannelAndOrderType(fromSystem, payChannel,
+			config = upsThirdpartyConfigDao.queryByProductIdAndPayChannelAndOrderType(productId, payChannel,
 					orderType);
 			cacheUtils.setCacheByRediskeynameAndKey(UPS_THIRDPARTY_CONFIG_CACHE, key, config);
 		}
@@ -54,7 +54,7 @@ public class UpsThirdpartyConfigServiceImpl
 		if (Objects.nonNull(config)) {
 			return config;
 		}
-		logger.error("没有查询到第三方支付渠道配置信息,订单信息：{}，{}，{}", fromSystem, payChannel, orderType);
+		logger.error("没有查询到第三方支付渠道配置信息,订单信息：{}，{}，{}", productId, payChannel, orderType);
 		throw new BussinessException("没有查询到第三方支付渠道配置信息！");
 	}
 
@@ -68,7 +68,7 @@ public class UpsThirdpartyConfigServiceImpl
 		List<UpsThirdpartyConfigEntity> list = upsThirdpartyConfigDao.findAll();
 		Map<String, UpsThirdpartyConfigEntity> cache = new LinkedHashMap<>();
 		for (UpsThirdpartyConfigEntity e : list) {
-			cache.put(CacheUtils.generateKey(e.getPayChannel(), e.getOrderType(), e.getFromSystem()), e);
+			cache.put(CacheUtils.generateKey(e.getPayChannel(), e.getOrderType(), String.valueOf(e.getProductId())), e);
 		}
 		return cache;
 	}

@@ -15,7 +15,7 @@ public abstract class UpsParamModel extends Model implements Signable{
 	private static final long serialVersionUID = -7016931404301904100L;
 
 	/* 美期 Meiqi 米融 Mirong 秒呗 Miaobei 多呗 Duobei 迅到 Xundao*/
-	private String fromSystem;
+	private Long productId;
 
 	/* 用户编码 */
 	@NotBlank(message = "用户编码不能为空")
@@ -69,12 +69,12 @@ public abstract class UpsParamModel extends Model implements Signable{
 	
 	
 
-	public String getFromSystem() {
-		return fromSystem;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setFromSystem(String fromSystem) {
-		this.fromSystem = fromSystem;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public String getUserNo() {

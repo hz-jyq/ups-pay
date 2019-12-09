@@ -36,7 +36,7 @@ public class RouteMaintenanceConfigIntercepter extends RouteChooseWorkerIntercep
 		// 调用方传入的订单类型
 		String orderType = upsParamModel.getOrderType();
 		// 系统来源 美期 秒呗或 米融 多呗等
-		String fromSystem = upsParamModel.getFromSystem();
+		Long productId = upsParamModel.getProductId();
 
 		for (RouteMaintenanceEntity routeMaintenanceEntity : maintenance) {
 			// 渠道公司编码相同，系统来源相同，银行也相同，支付场景相同，且当前时间在维护时间范围内，则说明在维护中, 从payChannels剔除
@@ -45,7 +45,7 @@ public class RouteMaintenanceConfigIntercepter extends RouteChooseWorkerIntercep
 				PayCompanyEntity payCompany = it.next();
 				if (routeMaintenanceEntity.getPayChannel().equalsIgnoreCase(payCompany.getCompanyCode())
 						&& bankCode.equalsIgnoreCase(routeMaintenanceEntity.getBankCode())
-						&& fromSystem.equalsIgnoreCase(routeMaintenanceEntity.getMerchantName())
+						&& productId == routeMaintenanceEntity.getProductId()
 						&& orderType.equalsIgnoreCase(routeMaintenanceEntity.getOrderType()))
 					it.remove();
 			}

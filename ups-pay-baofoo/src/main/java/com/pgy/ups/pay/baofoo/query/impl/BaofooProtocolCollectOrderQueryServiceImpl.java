@@ -51,7 +51,7 @@ public class BaofooProtocolCollectOrderQueryServiceImpl implements OrderQuerySer
 	/**
 	 * 公钥私钥相对classpath的路径
 	 */
-	@Value("${ups.runtime.environment.rsa.path}")
+	@Value("${ups.baofoo.rsa.path}")
 	private String RSA_KEY_PATH;
 
 	private static final String PAY_CHANNEL = "baofoo";
@@ -102,7 +102,7 @@ public class BaofooProtocolCollectOrderQueryServiceImpl implements OrderQuerySer
 	public String doSingleQuery(OrderPushEntity ope, boolean queryOnly) throws BussinessException{
 		// 查询配置
 		UpsThirdpartyConfigEntity config = upsThirdpartyConfigService.queryThirdpartyConfig(PAY_CHANNEL,
-				OrderType.PROTOCOL_COLLECT, ope.getFromSystem());
+				OrderType.PROTOCOL_COLLECT, ope.getProductId());
 
 		Map<String, Object> configMap = JSONObject.parseObject(config.getConfigDate(),
 				new TypeReference<Map<String, Object>>() {
@@ -112,7 +112,7 @@ public class BaofooProtocolCollectOrderQueryServiceImpl implements OrderQuerySer
 		String aes_key = MapUtils.getString(configMap, "aes_key", "");
 		String private_key = MapUtils.getString(configMap, "private_key", "");
 		String public_key = MapUtils.getString(configMap, "public_key", "");
-		String version = MapUtils.getString(configMap, "version", "");
+		String version = "4.0.0.0";//MapUtils.getString(configMap, "version", "");
 		String key_store_password = MapUtils.getString(configMap, "key_store_password", "");
 		String query_url = MapUtils.getString(configMap, "query_url", "");
 

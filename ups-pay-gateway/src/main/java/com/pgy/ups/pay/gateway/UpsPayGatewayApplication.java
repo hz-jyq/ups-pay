@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @ServletComponentScan
-@SpringBootApplication(scanBasePackages = { "com.pgy.ups.**" }, exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication(scanBasePackages = { "com.pgy.ups.**" }, exclude = { DataSourceAutoConfiguration.class })
 public class UpsPayGatewayApplication {
 
 	private static final Logger logger = LoggerFactory.getLogger(UpsPayGatewayApplication.class);
@@ -20,4 +20,3 @@ public class UpsPayGatewayApplication {
 	}
 
 }
-

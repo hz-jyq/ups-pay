@@ -8,7 +8,7 @@
 	
 	<property name="LOG_PATTERN" value="%d - %msg%n" />
 	
-	<property name="MAX_FILE_SIZE" value="64MB" />
+	<property name="MAX_FILE_SIZE" value="1024MB" />
 	
 	<property name="MAX_HISTORY" value="30" />
 	

@@ -41,8 +41,8 @@ public class OrderPushEntity extends Model{
 	@Column(name="order_create_time")
 	private Date orderCreateTime;
 	
-	@Column(name="from_system")
-	private String fromSystem;
+	@Column(name="product_id")
+	private Long productId;
 	
 	@Column(name="order_type")
 	private String orderType;
@@ -188,12 +188,12 @@ public class OrderPushEntity extends Model{
 		this.updateTime = updateTime;
 	}
 
-	public String getFromSystem() {
-		return fromSystem;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setFromSystem(String fromSystem) {
-		this.fromSystem = fromSystem;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public String getOrderType() {

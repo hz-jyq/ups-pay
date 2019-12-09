@@ -70,7 +70,7 @@ public class UpsOrderServiceImpl implements UpsOrderService {
 		// 订购类型
 		uspOrderEntity.setOrderType(upsParamModel.getOrderType());
 		// 来源系统
-		uspOrderEntity.setFromSystem(upsParamModel.getFromSystem());
+		uspOrderEntity.setProductId(upsParamModel.getProductId());
 		// 业务类型
 		uspOrderEntity.setBusinessType(upsParamModel.getBusinessType());
 		// 业务流水号
@@ -125,6 +125,8 @@ public class UpsOrderServiceImpl implements UpsOrderService {
 		// 订单编码生成
 		uspOrderEntity.setUpsOrderCode(getUpsOrderCode(uspOrderEntity));
 
+		uspOrderEntity.setRemark(upsParamModel.getRemark());
+
 		uspOrderEntity = upsOrderDao.saveAndFlush(uspOrderEntity);
 
 		updateUspLog(uspOrderEntity);
@@ -151,7 +153,7 @@ public class UpsOrderServiceImpl implements UpsOrderService {
 	 * @return
 	 */
 	private String getUpsOrderCode(UpsOrderEntity uspOrderEntity) {
-		return uspOrderEntity.getPayChannel() + uspOrderEntity.getFromSystem() + uspOrderEntity.getId();
+		return uspOrderEntity.getPayChannel() + uspOrderEntity.getProductId() + uspOrderEntity.getId();
 	}
 
 	@Override
@@ -171,7 +173,7 @@ public class UpsOrderServiceImpl implements UpsOrderService {
 		orderPushEntity.setPayChannel(orderEntity.getPayChannel());
 		orderPushEntity.setOrderType(orderEntity.getOrderType());
 		orderPushEntity.setOrderCode(orderEntity.getUpsOrderCode());
-		orderPushEntity.setFromSystem(orderEntity.getFromSystem());
+		orderPushEntity.setProductId(orderEntity.getProductId());
 		orderPushEntity.setOrderStatus(orderEntity.getOrderStatus());
 		
 		orderPushEntity.setNotifyUrl(orderEntity.getNotifyUrl());
@@ -199,12 +201,8 @@ public class UpsOrderServiceImpl implements UpsOrderService {
 	}
 
 	@Override
-	public UpsOrderEntity queryByOrderId(Long orderId) {
-		Optional<UpsOrderEntity> optional = upsOrderDao.findById(orderId);
-		if (optional.isPresent()) {
-			return optional.get();
-		}
-		return null;
+	public UpsOrderEntity queryByOrderId(Long orderId,Long productId) {
+		return upsOrderDao.findByIdAndProductId(orderId,productId);
 	}
 
 	@Override

@@ -13,23 +13,23 @@ public interface MerchantConfigService {
     
 	/**
 	 * 查询来源商户公钥信息
-	 * @param fromSystem
+	 * @param productId
 	 * @return
 	 */
-	String queryMerchantPublicKey(String fromSystem);
+	String queryMerchantPublicKey(Long productId);
 	
 	/**
 	 * 查询来源商户私钥信息
-	 * @param fromSystem
+	 * @param productId
 	 * @return
 	 */
-	String queryMerchantPrivateKey(String fromSystem);
+	String queryMerchantPrivateKey(Long productId);
 	
 	/**
 	 * 查询来源商户信息
 	 */
 	
-	MerchantConfigEntity findMerchant(String fromSystem);
+	MerchantConfigEntity findMerchant(Long productId);
     
 	/**
 	 * 查询所有商户信息

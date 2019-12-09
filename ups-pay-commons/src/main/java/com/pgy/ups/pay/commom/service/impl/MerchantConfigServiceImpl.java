@@ -1,8 +1,5 @@
 package com.pgy.ups.pay.commom.service.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +7,9 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.pgy.ups.common.exception.BussinessException;
@@ -41,9 +35,6 @@ public class MerchantConfigServiceImpl implements MerchantConfigService, Cacheab
 
 	private Logger logger = LoggerFactory.getLogger(MerchantConfigServiceImpl.class);
 
-	@Value("${ups.runtime.environment.rsa.path}")
-	private String AES_KEY_PATH;
-
 	@Resource
 	private MerchantConfigDao merchantConfigDao;
 
@@ -54,67 +45,59 @@ public class MerchantConfigServiceImpl implements MerchantConfigService, Cacheab
 	 * 查询商户私钥
 	 */
 	@Override
-	public String queryMerchantPrivateKey(String fromSystem) {
-		MerchantConfigEntity merchantConfigEntity = findMerchant(fromSystem);
+	public String queryMerchantPrivateKey(Long productId) {
+		MerchantConfigEntity merchantConfigEntity = findMerchant(productId);
 		if (Objects.isNull(merchantConfigEntity) || StringUtils.isEmpty(merchantConfigEntity.getUpsPrivateKey())) {
-			logger.error("查询来源商私钥信息异常,fromSystem:{} ,merchantConfig:{}", fromSystem, merchantConfigEntity);
+			logger.error("查询来源商私钥信息异常,productId:{} ,merchantConfig:{}", productId, merchantConfigEntity);
 			throw new BussinessException("查询来源商私钥信息异常！");
 		}
-		//秘钥文件在classpath下的路径
-		String private_key_path = AES_KEY_PATH + fromSystem + File.separator
-				+ merchantConfigEntity.getUpsPrivateKey();
-		ClassPathResource classPathResource = new ClassPathResource(private_key_path);
-		try {
-			return IOUtils.toString(classPathResource.getInputStream(), "UTF-8");
-		} catch (IOException e) {
-			logger.error("系统来源：{}", fromSystem);
-			logger.error("私钥路径：{}", private_key_path);
-			logger.error("读取商户私钥信息异常：{}", e);
+		String privateKey = merchantConfigEntity.getUpsPrivateKey();
+		if(StringUtils.isBlank(privateKey)) {
+			throw new BussinessException("读取商户私钥信息异常！");
 		}
-		throw new BussinessException("读取商户私钥信息异常！");
+		return privateKey;
+		
 	}
 
 	/**
 	 * 查询商户公钥
 	 */
 	@Override
-	public String queryMerchantPublicKey(String fromSystem) {
-		MerchantConfigEntity merchantConfigEntity = findMerchant(fromSystem);
-		if (Objects.isNull(merchantConfigEntity) || StringUtils.isEmpty(merchantConfigEntity.getMerchantPublicKey())) {
-			logger.error("查询来源商公钥信息异常,fromSystem:{} ,merchantConfig:{}", fromSystem, merchantConfigEntity);
+	public String queryMerchantPublicKey(Long productId) {
+		MerchantConfigEntity merchantConfigEntity = findMerchant(productId);
+		if(Objects.isNull(merchantConfigEntity) ) {
+			logger.error("该商户不存在或贝禁用：{}",productId);
+			throw new BussinessException("该商户不存在或被禁用！");
+		}
+		if (StringUtils.isEmpty(merchantConfigEntity.getMerchantPublicKey())) {
+			logger.error("查询来源商公钥信息异常,productId:{} ,merchantConfig:{}", productId, merchantConfigEntity);
 			throw new BussinessException("查询来源商公钥信息异常！");
 		}
-		String public_key_path = AES_KEY_PATH + fromSystem + File.separator
-				+ merchantConfigEntity.getMerchantPublicKey();
-		ClassPathResource classPathResource = new ClassPathResource(public_key_path);
-		try {
-			return IOUtils.toString(classPathResource.getInputStream(), "UTF-8");
-		} catch (IOException e) {
-			logger.error("系统来源：{}", fromSystem);
-			logger.error("公钥路径：{}", public_key_path);
-			logger.error("读取商户公钥信息异常：{}", e);
+		String publicKey = merchantConfigEntity.getMerchantPublicKey();
+		if(StringUtils.isBlank(publicKey)) {
+			throw new BussinessException("读取商户公钥信息异常！");
 		}
-		throw new BussinessException("读取商户公钥信息异常！");
+		return publicKey;
+		
 	}
 
 	@Override
 	public List<MerchantConfigEntity> queryAvaliableMerchantList() {
-
-		return merchantConfigDao.querByAvaliableMerchantList(true, new Date());
+		return merchantConfigDao.querByAvaliableMerchantList(true);
 	}
 
 	/**
 	 * 查询来源商户信息
 	 */
 	@Override
-	public MerchantConfigEntity findMerchant(String fromSystem) {
+	public MerchantConfigEntity findMerchant(Long productId) {
 		//先查询缓存
 		MerchantConfigEntity mce = cacheUtils.getCacheByRediskeynameAndKey(UPS_MERCHANT_CACHE,
-				fromSystem,MerchantConfigEntity.class);
+				String.valueOf(productId),MerchantConfigEntity.class);
 		if (Objects.isNull(mce)) {
 			//若缓存不存在，则从数据库读取，并更新缓存
-			mce = merchantConfigDao.queryByMerchant(fromSystem, true, new Date());
-			cacheUtils.setCacheByRediskeynameAndKey(UPS_MERCHANT_CACHE, fromSystem,mce);
+			mce = merchantConfigDao.queryByMerchant(productId, true);
+			cacheUtils.setCacheByRediskeynameAndKey(UPS_MERCHANT_CACHE, String.valueOf(productId),mce);
 		}
 		return mce;
 	}
@@ -135,7 +118,7 @@ public class MerchantConfigServiceImpl implements MerchantConfigService, Cacheab
 		List<MerchantConfigEntity> list = queryAvaliableMerchantList();
 		Map<String, MerchantConfigEntity> cache = new LinkedHashMap<>();
 		for (MerchantConfigEntity mce : list) {
-			cache.put(mce.getMerchantName(), mce);
+			cache.put(String.valueOf(mce.getProductId()), mce);
 		}
 		return cache;
 	}

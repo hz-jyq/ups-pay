@@ -149,7 +149,13 @@
 			<groupId>com.pgy.ups.pay</groupId>
 			<artifactId>ups-pay-commons</artifactId>
 		</dependency>
-	
+
+		<dependency>
+			<groupId>com.pgy</groupId>
+			<artifactId>data-handler-service</artifactId>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

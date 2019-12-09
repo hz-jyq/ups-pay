@@ -28,8 +28,8 @@ public class UpsLogEntity extends Model{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="from_system")
-	private String fromSystem;
+	@Column(name="product_id")
+	private Long productId;
 	
 	@Column(name="request_url")
 	private String requestUrl;
@@ -68,12 +68,12 @@ public class UpsLogEntity extends Model{
 		this.id = id;
 	}
 
-	public String getFromSystem() {
-		return fromSystem;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setFromSystem(String fromSystem) {
-		this.fromSystem = fromSystem;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public String getRequestUrl() {

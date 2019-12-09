@@ -1,13 +1,14 @@
 package com.pgy.ups.pay.commom.service.impl;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 
+import com.pgy.ups.common.annotation.PrintExecuteTime;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
@@ -21,7 +22,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.pgy.ups.common.utils.DateUtils;
 import com.pgy.ups.common.utils.OkHttpUtil;
-import com.pgy.ups.common.utils.ReflectUtils;
 import com.pgy.ups.common.utils.SpringUtils;
 import com.pgy.ups.pay.commom.constants.OrderPushStatus;
 import com.pgy.ups.pay.commom.dao.OrderPushDao;
@@ -46,9 +46,11 @@ public class OrderPushServiceImp implements OrderPushService {
 
 	@Resource
 	private OrderPushDao orderPushDao;
-	
+
 	@Resource
 	private MerchantConfigService merchantConfigService;
+
+	private static ExecutorService executor = Executors.newFixedThreadPool(8);
 
 	@Override
 	public OrderPushEntity queryByOrderId(Long upsOrderId) {
@@ -106,53 +108,94 @@ public class OrderPushServiceImp implements OrderPushService {
 
 	@Override
 	@Async
+	@PrintExecuteTime
 	public void pushOrder() {
 
 		List<OrderPushEntity> list = this.queryFinalStatusOrderPushList();
 
 		logger.info("订单推送业务端任务开始！本次推送订单数：{}条", list.size());
-		// 遍历推送
+		// 遍历推送使用多线程处理加快推送速度
+		CountDownLatch latch = new CountDownLatch(list.size());
 		for (OrderPushEntity ope : list) {
-
-			UpsOrderEntity oe = SpringUtils.getBean(UpsOrderService.class).queryByOrderId(ope.getOrderId());
-
-			// 封装返回参数
-			OrderPushModel orderPushModel = new OrderPushModel();
-			orderPushModel.setMerchantName(ope.getFromSystem());
-			orderPushModel.setPayChannel(ope.getPayChannel());
-			orderPushModel.setOrderType(ope.getOrderType());
-			orderPushModel.setUpsOrderId(ope.getOrderId());
-			orderPushModel.setOrderStatus(ope.getOrderStatus());
-			orderPushModel.setChannelResultCode(ope.getChannelResultCode());
-			orderPushModel.setChannelResultMsg(ope.getChannelResultMsg());
-			orderPushModel.setBussinessFlowNum(oe.getBusinessFlowNum());
-			orderPushModel.setSign(SecurityUtils.sign(orderPushModel, merchantConfigService.queryMerchantPrivateKey(ope.getFromSystem())));
-			boolean flag = false;
-			try {
-				String resultStr = OkHttpUtil.postForm(ope.getNotifyUrl(), ReflectUtils.objectToMap(orderPushModel));
-				flag = parseResult(resultStr);
-			} catch (IOException e) {
-				logger.error("订单推送业务端掉调用HttpClient异常：{},推送内容：{}", e, orderPushModel);
-				// 获取当前环境 非生产环境直接设为推送成功
-				flag = false;
-			}
-
-			// 根据返回状态处理
-			if (flag) {
-				logger.info("推送订单成功：{}", orderPushModel);
-				// 成功
-				ope.setPushStatus(OrderPushStatus.PUSH_FINSH);
-			} else {
-				// 失败
-				logger.info("推送订单失败：{}", orderPushModel);
-				ope.setPushStatus(OrderPushStatus.PUSH_ING);
-			}
-			// 增加推送次数
-			Integer pushCount = ope.getPushCount();
-			ope.setPushCount(++pushCount);
-			updateOrderPush(ope);
+			executor.submit(() -> new SimpleRunnable(ope,latch));
+		}
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			logger.error("线程异常",e);
 		}
 		logger.info("订单推送业务端任务结束！");
+	}
+
+	private  class SimpleRunnable implements Runnable{
+
+		private  final CountDownLatch latch;
+
+		private  final  OrderPushEntity orderPushEntity;
+
+		public  SimpleRunnable(OrderPushEntity orderPushEntity,CountDownLatch latch){
+			this.orderPushEntity  = orderPushEntity;
+			this.latch = latch;
+			run();
+		}
+
+
+		@Override
+		public void run() {
+			try {
+				pushOrder(orderPushEntity);
+			}finally {
+				latch.countDown();
+			}
+		}
+	}
+	@Override
+	public void pushOrder(OrderPushEntity ope)  {
+		UpsOrderEntity oe = SpringUtils.getBean(UpsOrderService.class).queryByOrderId(ope.getOrderId(),ope.getProductId());
+		if(oe == null){
+			logger.info("订单没有找到!{}",ope.getOrderId());
+			return;
+		}
+		// 封装返回参数
+		OrderPushModel orderPushModel = new OrderPushModel();
+		orderPushModel.setProductId(ope.getProductId());
+		orderPushModel.setPayChannel(ope.getPayChannel());
+		orderPushModel.setOrderType(ope.getOrderType());
+		orderPushModel.setUpsOrderId(ope.getOrderId());
+		orderPushModel.setOrderStatus(ope.getOrderStatus());
+		orderPushModel.setChannelResultCode(ope.getChannelResultCode());
+		orderPushModel.setChannelResultMsg(ope.getChannelResultMsg());
+		orderPushModel.setBussinessFlowNum(oe.getBusinessFlowNum());
+		orderPushModel.setRemark(oe.getRemark());
+		orderPushModel.setSign(
+				SecurityUtils.sign(orderPushModel, merchantConfigService.queryMerchantPrivateKey(ope.getProductId())));
+		logger.info("推送信息{}",orderPushModel);
+		boolean flag = false;
+		try {
+			String resultStr = OkHttpUtil.post(ope.getNotifyUrl(), JSONObject.toJSONString(orderPushModel));
+			logger.info("业务http返回结果,类型{},订单号{}{}",ope.getOrderType(),ope.getOrderId(),resultStr);
+			flag = parseResult(resultStr);
+		} catch (Exception e) {
+			logger.error("订单推送业务端掉调用HttpClient异常：{},推送内容：{}", e, orderPushModel);
+			// 获取当前环境 非生产环境直接设为推送成功
+			flag = false;
+		}
+
+		// 根据返回状态处理
+		if (flag) {
+			logger.info("推送订单成功：{}", orderPushModel);
+			// 成功
+			ope.setPushStatus(OrderPushStatus.PUSH_FINSH);
+		} else {
+			// 失败
+			logger.info("推送订单失败：{}", orderPushModel);
+			ope.setPushStatus(OrderPushStatus.PUSH_ING);
+		}
+		// 增加推送次数
+		Integer pushCount = ope.getPushCount();
+		ope.setPushCount(++pushCount);
+		updateOrderPush(ope);
+
 	}
 
 	private boolean parseResult(String resultStr) {

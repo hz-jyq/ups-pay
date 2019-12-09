@@ -77,7 +77,7 @@ public class YeepayPayOrderQueryServiceImpl implements OrderQueryService<String>
 	public String doSingleQuery(OrderPushEntity ope, boolean queryOnly) throws BussinessException{
 		// 查询配置
 		UpsThirdpartyConfigEntity config = upsThirdpartyConfigService.queryThirdpartyConfig(PAY_CHANNEL, OrderType.PAY,
-				ope.getFromSystem());
+				ope.getProductId());
 		// 抽取配置信息
 		Map<String, Object> configMap = JSONObject.parseObject(config.getConfigDate(),
 				new TypeReference<HashMap<String, Object>>() {
@@ -166,7 +166,7 @@ public class YeepayPayOrderQueryServiceImpl implements OrderQueryService<String>
 		String bankMsg = MapUtils.getString(map, "bankMsg", "");
 
 		// 查询订单
-		UpsOrderEntity upsOrderEntity = upsOrderService.queryByOrderId(ope.getOrderId());
+		UpsOrderEntity upsOrderEntity = upsOrderService.queryByOrderId(ope.getOrderId(),ope.getProductId());
 		// 更新订单和订单推送对象状态
 		ope.setChannelResultCode(errorCode + " " + transferStatusCode + " " + bankTrxStatusCode);
 		ope.setChannelResultMsg(bankMsg);

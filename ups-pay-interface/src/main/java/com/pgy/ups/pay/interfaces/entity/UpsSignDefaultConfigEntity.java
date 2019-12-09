@@ -19,8 +19,8 @@ public class UpsSignDefaultConfigEntity  extends Model {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="form_system")
-    private  String formSystem;
+    @Column(name="product_id")
+    private  Long productId;
 
 
 
@@ -39,12 +39,12 @@ public class UpsSignDefaultConfigEntity  extends Model {
     private Date updateTime;
 
 
-    public String getFormSystem() {
-        return formSystem;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setFormSystem(String formSystem) {
-        this.formSystem = formSystem;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
 

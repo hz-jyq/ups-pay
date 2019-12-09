@@ -7,7 +7,6 @@ import org.springframework.core.Ordered;
 import com.pgy.ups.pay.interfaces.entity.PayCompanyEntity;
 import com.pgy.ups.pay.interfaces.intercepter.Intercepter;
 import com.pgy.ups.pay.interfaces.model.UpsParamModel;
-import com.pgy.ups.pay.route.worker.impl.RouteChooseWorker;
 
 public abstract class RouteChooseWorkerIntercepter
 		implements Intercepter<RouteChooseWorker>, Ordered, Comparable<RouteChooseWorkerIntercepter> {

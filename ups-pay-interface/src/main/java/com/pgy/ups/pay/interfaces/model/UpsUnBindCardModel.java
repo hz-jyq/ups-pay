@@ -35,7 +35,7 @@ public class UpsUnBindCardModel extends Model {
 
 
     /* 美期 Meiqi 米融 Mirong 秒呗 Miaobei 多呗 Duobei 迅到 XunDao*/
-    private String fromSystem;
+    private Long productId;
 
     public String getUserNo() {
         return userNo;
@@ -85,11 +85,11 @@ public class UpsUnBindCardModel extends Model {
         this.phoneNo = phoneNo;
     }
 
-    public String getFromSystem() {
-        return fromSystem;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setFromSystem(String fromSystem) {
-        this.fromSystem = fromSystem;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }

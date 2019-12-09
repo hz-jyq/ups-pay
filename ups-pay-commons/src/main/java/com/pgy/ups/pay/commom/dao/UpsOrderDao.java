@@ -8,6 +8,8 @@ import com.pgy.ups.pay.interfaces.entity.UpsOrderEntity;
 @Repository
 public interface UpsOrderDao extends JpaRepository<UpsOrderEntity, Long>{
 
+    UpsOrderEntity findByIdAndProductId(Long id,Long productId);
+
 
 
 }

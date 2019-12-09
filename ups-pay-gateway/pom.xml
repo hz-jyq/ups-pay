@@ -106,8 +106,10 @@
 		</dependency>
 
 		<!-- alibaba的druid数据库连接池 -->
-		<!-- <dependency> <groupId>com.alibaba</groupId> <artifactId>druid-spring-boot-starter</artifactId> 
-			</dependency> -->
+		 <dependency>
+             <groupId>com.alibaba</groupId>
+             <artifactId>druid-spring-boot-starter</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
@@ -181,6 +183,11 @@
 			<groupId>com.pgy.ups.pay</groupId>
 			<artifactId>ups-pay-service</artifactId>
 			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
 		</dependency>
 
 	</dependencies>

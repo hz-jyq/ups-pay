@@ -31,7 +31,7 @@ public class UpsLogServiceImpl implements UpsLogService{
 		
 		UpsLogEntity upsLogEntity=new UpsLogEntity();
 		upsLogEntity.setRequestUrl(url);
-		upsLogEntity.setFromSystem(upsParamModel.getFromSystem());
+		upsLogEntity.setProductId(upsParamModel.getProductId());
 		upsLogEntity.setBusinessFlowNum(upsParamModel.getBusinessFlowNum());
 		upsLogEntity.setBusinessParam(JSONObject.toJSONString(upsParamModel));
 		upsLogEntity.setCreateTime(new Date());

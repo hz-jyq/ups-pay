@@ -1,74 +1,81 @@
 package com.pgy.ups.pay.interfaces.entity;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.pgy.ups.pay.interfaces.model.Model;
+
 /**
  * 来源商户配置表
+ * 
  * @author 墨凉
  *
  */
 @Entity
-@Table(name="ups_t_merchant_config")
-public class MerchantConfigEntity extends Model{
+@Table(name = "ups_t_merchant_config")
+public class MerchantConfigEntity extends Model {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1205296307960629481L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(name="merchant_code")
-	private String merchantCode;
-	
-	@Column(name="merchant_name")
+
+	@Column(name = "product_id")
+	private Long productId;
+
+	@Column(name = "merchant_name")
 	private String merchantName;
-	
-	@Column(name="available",columnDefinition="bit")
+
+	@Column(name = "description")
+	private String description;
+
+	@Column(name = "available", columnDefinition = "bit")
 	private Boolean available;
-	
-	@Column(name="start_time")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date startTime;
-	
-	@Column(name="end_time")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date endTime;
-	
-	@Column(name="merchant_public_key")
+    	
+	@Column(name="merchant_public_key",columnDefinition="text")
 	private String merchantPublicKey;
-	
-	@Column(name="ups_private_key")
+    	
+	@Column(name = "ups_private_key",columnDefinition="text")
 	private String upsPrivateKey;
-	
-	@Column(name="create_time")
+
+	@Column(name = "create_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
-	
-	@Column(name="update_time")
+
+	@Column(name = "update_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateTime;
-	
-	@Column(name="create_user")
+
+	@Column(name = "create_user")
 	private String createUser;
-	
-	@Column(name="update_user")
+
+	@Column(name = "update_user")
 	private String updateUser;
+
+	/*@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "ups_t_merchant_order_type", joinColumns = @JoinColumn(name = "merchant_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "order_type_id", referencedColumnName = "id"))
+	private List<UpsOrderTypeEntity> orderTypeList;*/
 	
-	@Column(name="default_pay_channel")
-	private String defaultPayChannel;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "merchantConfigEntity")
+	@JSONField(serialize=false)  
+	private List<MerchantOrderTypeEntity> merchantOrderTypeList;
 
 	public Long getId() {
 		return id;
@@ -78,12 +85,12 @@ public class MerchantConfigEntity extends Model{
 		this.id = id;
 	}
 
-	public String getMerchantCode() {
-		return merchantCode;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setMerchantCode(String merchantCode) {
-		this.merchantCode = merchantCode;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public String getMerchantName() {
@@ -94,8 +101,6 @@ public class MerchantConfigEntity extends Model{
 		this.merchantName = merchantName;
 	}
 
-	
-
 	public Boolean getAvailable() {
 		return available;
 	}
@@ -104,21 +109,6 @@ public class MerchantConfigEntity extends Model{
 		this.available = available;
 	}
 
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
 
 	public String getMerchantPublicKey() {
 		return merchantPublicKey;
@@ -168,12 +158,22 @@ public class MerchantConfigEntity extends Model{
 		this.updateUser = updateUser;
 	}
 
-	public String getDefaultPayChannel() {
-		return defaultPayChannel;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDefaultPayChannel(String defaultPayChannel) {
-		this.defaultPayChannel = defaultPayChannel;
-	}	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<MerchantOrderTypeEntity> getMerchantOrderTypeList() {
+		return merchantOrderTypeList;
+	}
+
+	public void setMerchantOrderTypeList(List<MerchantOrderTypeEntity> merchantOrderTypeList) {
+		this.merchantOrderTypeList = merchantOrderTypeList;
+	}
+	
+	
 	
 }

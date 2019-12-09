@@ -31,8 +31,8 @@ public class CollectChooseEntity extends Model{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="merchant_name")
-	private String merchantName;
+	@Column(name="product_id")
+	private String productId;
 	
 	@Column(name="collect_type")
 	private String collectType;
@@ -63,12 +63,12 @@ public class CollectChooseEntity extends Model{
 		this.id = id;
 	}
 
-	public String getMerchantName() {
-		return merchantName;
+	public String getProductId() {
+		return productId;
 	}
 
-	public void setMerchantName(String merchantName) {
-		this.merchantName = merchantName;
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
 
 	public Boolean getActive() {

@@ -9,6 +9,6 @@ import com.pgy.ups.pay.interfaces.entity.UpsThirdpartyConfigEntity;
 public interface UpsThirdpartyConfigDao extends JpaRepository<UpsThirdpartyConfigEntity, Long>{
     
 
-	UpsThirdpartyConfigEntity queryByFromSystemAndPayChannelAndOrderType(String fromSystem,String payChannel, String orderType);
+	UpsThirdpartyConfigEntity queryByProductIdAndPayChannelAndOrderType(Long productId,String payChannel, String orderType);
 
 }
