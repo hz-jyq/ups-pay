@@ -1,11 +1,8 @@
 <h1>ups pay system</h1>
 
- 项目简介
- ========
+ # 项目简介
  支付系统，用于用户的代付代扣，签约绑卡操作
- -------  
- 项目框架
- -------  
+ ## 框架
  spring boot + dubbo + redis + sharding-jdbc(以productId分表) + zk +  rateLimit
  项目启动
  -------  
