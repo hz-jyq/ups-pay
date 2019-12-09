@@ -1,14 +1,11 @@
 <h1>ups pay system</h1>
-
- # 项目简介
+# 项目简介
  支付系统，用于用户的代付代扣，签约绑卡操作
- ## 框架
+## 框架
  spring boot + dubbo + redis + sharding-jdbc(以productId分表) + zk +  rateLimit
- 项目启动
- -------  
+## 项目启动
 启动zk，然后先启动 baofoo,yeapay Application的 dubbo服务器，在启动其他的 Application
-业务介绍
- -------  
+## 业务介绍
 <hr/>
    1. 有代付代扣，签约，绑卡，协议绑卡，协议签约绑卡<br>
    2. 协议代扣用户必须完成签约绑卡和签约<br>
